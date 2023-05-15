@@ -8,7 +8,7 @@
 #include "NPCAnimation.h"
 #include "Basic.h"
 #include "Dialogue.h"
-
+//aefosovbeuw
 SDL_Window* win = NULL;
 SDL_Renderer* ren = NULL;
 
