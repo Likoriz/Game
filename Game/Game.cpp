@@ -9,6 +9,8 @@
 #include "Basic.h"
 #include "Dialogue.h"
 //aefosovbeuw
+
+//o;hljvkxjgchvkjblkn
 SDL_Window* win = NULL;
 SDL_Renderer* ren = NULL;
 
