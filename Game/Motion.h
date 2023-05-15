@@ -14,7 +14,7 @@ struct Character
 	SDL_FRect destinationRect = {};
 	SDL_FRect playerHitbox = {};
 
-	float x = 2500, y = 1500, speed = 150;// x=150, y=2000
+	float x = 150, y = 2000, speed = 150;// x=150, y=2000 // 2500 1500
 
 	int frame = 0, frameCount = 0, currentFrametime = 0, maxFrametime = 0;
 	bool animation = false;

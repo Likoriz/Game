@@ -25,7 +25,7 @@ void Dialogue(DialogueBox& dialogueBox)
 
 	switch (npc.rects[npc.index].type)
 	{
-	case 2:
+	case 8:
 		switch(dialogueBox.progress)
 		{
 		case 0:

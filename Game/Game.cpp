@@ -122,8 +122,8 @@ int main(int argc, char* argv[])
 								}
 							character.playerRect.w = 128;
 							character.playerRect.h = 128;
-							//character.x = 150;
-							//character.y = 2000;
+							character.x = 150;
+							character.y = 2000;
 						}
 						timer.lastTime = SDL_GetTicks();
 					}

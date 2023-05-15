@@ -225,15 +225,15 @@ void UpdateMap(Map& map, TileSet& tile, MapHitbox& hitbox)
 
 				switch (hitbox.hitboxesCode[i][j])
 				{
-				case 2:
-					npc.rects[z].type = 2;
+				case 8:
+					npc.rects[z].type = 8;
 					npc.rects[z].frameCount = 5;
 					npc.rects[z].rect.y = npc.rects[z].rect.h * 6;
 					break;
-				case 3:
-					npc.rects[z].type = 3;
+				case 12:
+					npc.rects[z].type = 12;
 					npc.rects[z].frameCount = 5;
-					npc.rects[z].rect.y = npc.rects[z].rect.h * 3;
+					npc.rects[z].rect.y = npc.rects[z].rect.h * 10;
 					break;
 				}
 				k++;
