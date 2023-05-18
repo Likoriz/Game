@@ -8,7 +8,7 @@
 
 Character character;
 
-void Motion(Character& character, Time& timer)
+void Motion()
 {
 	float tmpx = character.x, tmpy = character.y;
 	float tmpdstx = character.destinationRect.x, tmpdsty = character.destinationRect.y;
@@ -135,7 +135,7 @@ void Motion(Character& character, Time& timer)
 	//system("cls");
 }
 
-void Animation(Character& character, Time& timer)
+void Animation()
 {
 	if (character.animation)
 	{

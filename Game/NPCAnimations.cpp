@@ -12,7 +12,7 @@ SDL_NPCRect* GetSpaceForNPC()
 	return rects;
 }
 
-void NPCAnimation(NPC& npc, Time& timer)
+void NPCAnimation()
 {
 	for (int i = 0; i < npc.count; i++)
 	{
@@ -32,7 +32,7 @@ void NPCAnimation(NPC& npc, Time& timer)
 	}
 }
 
-void FreeSpaceForNPC(NPC& npc)
+void FreeSpaceForNPC()
 {
 	SDL_DestroyTexture(npc.Texture);
 	npc.Texture = NULL;

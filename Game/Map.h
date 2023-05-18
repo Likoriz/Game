@@ -49,12 +49,12 @@ struct TileSet
 };
 extern TileSet tile;
 
-void LoadMap(Map& map, TileSet& tile, MapHitbox& hitbox, NPC& npc);
-void UpdateMap(Map& map, TileSet& tile, MapHitbox& hitbox);
-void DeleteMap(Map& map, TileSet& tile, MapHitbox& hitbox);
+void LoadMap();
+void UpdateMap();
+void DeleteMap();
 int** GetSpaceForMap();
-void FreeSpaceForMap(Map& map);
+void FreeSpaceForMap();
 int** GetSpaceForHitboxesCode();
-void FreeSpaceForHitboxesCode(MapHitbox& hitbox);
+void FreeSpaceForHitboxesCode();
 SDL_Rect* GetSpaceForHitboxes();
-void FreeSpaceForHitboxes(MapHitbox& hitbox);
+void FreeSpaceForHitboxes();

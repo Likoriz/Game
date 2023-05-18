@@ -40,5 +40,5 @@ struct GameState
 };
 extern GameState state;
 
-void Motion(Character& character, Time& timer);
-void Animation(Character& character, Time& timer);
+void Motion();
+void Animation();

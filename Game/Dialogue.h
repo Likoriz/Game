@@ -34,5 +34,5 @@ struct DialogueBox
 };
 extern DialogueBox dialogueBox;
 
-void Dialogue(DialogueBox& dialogueBox);
-double CheckNPC(NPC& npc);
+void Dialogue();
+double CheckNPC();

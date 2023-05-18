@@ -27,5 +27,5 @@ struct NPC
 extern NPC npc;
 
 SDL_NPCRect* GetSpaceForNPC();
-void NPCAnimation(NPC& npc, Time& timer);
-void FreeSpaceForNPC(NPC& npc);
+void NPCAnimation();
+void FreeSpaceForNPC();

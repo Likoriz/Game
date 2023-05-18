@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
 	timer.lastTime = SDL_GetTicks();
 
-	LoadMap(map, tile, hitbox, npc);
+	LoadMap();
 
 	bool isp = true;
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 					case SDL_SCANCODE_A: character.isLeft = true; character.isIdle = false;									break;
 					case SDL_SCANCODE_LSHIFT: character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
 					case SDL_SCANCODE_E:
-						minS = CheckNPC(npc);
+						minS = CheckNPC();
 						if (minS <= MINSFROMNPC)
 						{
 							state.isGaming = false;
@@ -185,22 +185,22 @@ int main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 		SDL_RenderClear(ren);
 
-		UpdateMap(map, tile, hitbox);
-		NPCAnimation(npc, timer);
+		UpdateMap();
+		NPCAnimation();
 
 		if (state.isGaming)
-			Motion(character, timer);
+			Motion();
 
-		Animation(character, timer);
+		Animation();
 
 		if (state.isDialouge)
-			Dialogue(dialogueBox);
+			Dialogue();
 
 		SDL_RenderPresent(ren);
 	}
 
 	SDL_DestroyTexture(character.playerTexture);
-	DeleteMap(map, tile, hitbox);
+	DeleteMap();
 
 	Mix_CloseAudio();
 

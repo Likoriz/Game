@@ -10,7 +10,7 @@
 
 DialogueBox dialogueBox;
 
-void Dialogue(DialogueBox& dialogueBox)
+void Dialogue()
 {
 	SDL_DestroyTexture(dialogueBox.boxTexture);
 	dialogueBox.boxTexture = LoadTexture("Assets\\Box.png", &dialogueBox.boxTextureRect);
@@ -85,7 +85,7 @@ void Dialogue(DialogueBox& dialogueBox)
 	TTF_CloseFont(font);
 }
 
-double CheckNPC(NPC& npc)
+double CheckNPC()
 {
 	double s = 0;
 	double minS = LONG_MAX;

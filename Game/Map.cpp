@@ -12,7 +12,7 @@ TileSet tile;
 MapHitbox hitbox;
 NPC npc;
 
-void LoadMap(Map& map, TileSet& tile, MapHitbox& hitbox, NPC& npc)
+void LoadMap()
 {
 	switch (map.level)
 	{
@@ -71,7 +71,7 @@ void LoadMap(Map& map, TileSet& tile, MapHitbox& hitbox, NPC& npc)
 	npc.Texture = LoadTexture("NPC\\NPC.png", &npc.rect);
 }
 
-void UpdateMap(Map& map, TileSet& tile, MapHitbox& hitbox)
+void UpdateMap()
 {
 	SDL_DestroyTexture(tile.texture);
 	tile.texture = LoadTexture(tile.texturePath, &tile.tile);
@@ -160,12 +160,12 @@ void UpdateMap(Map& map, TileSet& tile, MapHitbox& hitbox)
 	//SDL_RenderDrawRects(ren, hitbox.hitboxes, hitbox.count);
 }
 
-void DeleteMap(Map& map, TileSet& tile, MapHitbox& hitbox)
+void DeleteMap()
 {
-	FreeSpaceForMap(map);
-	FreeSpaceForHitboxesCode(hitbox);
-	FreeSpaceForHitboxes(hitbox);
-	FreeSpaceForNPC(npc);
+	FreeSpaceForMap();
+	FreeSpaceForHitboxesCode();
+	FreeSpaceForHitboxes();
+	FreeSpaceForNPC();
 }
 
 int** GetSpaceForMap()
@@ -176,7 +176,7 @@ int** GetSpaceForMap()
 	return terrain;
 }
 
-void FreeSpaceForMap(Map& map)
+void FreeSpaceForMap()
 {
 	for (int i = 0; i < map.heightR; i++)
 		free(map.terrain[i]);
@@ -192,7 +192,7 @@ int** GetSpaceForHitboxesCode()
 	return hitboxesCode;
 }
 
-void FreeSpaceForHitboxesCode(MapHitbox& hitbox)
+void FreeSpaceForHitboxesCode()
 {
 	for (int i = 0; i < hitbox.heightR; i++)
 		free(hitbox.hitboxesCode[i]);
@@ -207,7 +207,7 @@ SDL_Rect* GetSpaceForHitboxes()
 	return hitboxes;
 }
 
-void FreeSpaceForHitboxes(MapHitbox& hitbox)
+void FreeSpaceForHitboxes()
 {
 	free(hitbox.hitboxes);
 	hitbox.hitboxes = NULL;
