@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include "Menu.h"
 #include "Basic.h"
@@ -9,8 +10,10 @@
 Menu menu;
 MenuButtons StartGame, ChooseEnchantress, ChooseKnight, ResumeGame, ReturnToMainMenu, ContinueGame, Credits, Back, Exit;
 
-void StartMenu(Menu& menu, MenuButtons& StartGame, MenuButtons& ContinueGame, MenuButtons& Credits, MenuButtons& Exit)
+void StartMenu()
 {
+	PlayMusic("Music\\Title.wav");
+
 	SDL_RenderClear(ren);
 	menu.backgroundTexture = LoadTexture("Menu\\MenuBackground.png", &menu.backgroundRect);
 
@@ -94,7 +97,7 @@ void StartMenu(Menu& menu, MenuButtons& StartGame, MenuButtons& ContinueGame, Me
 					if (mouseX >= Credits.dstRect.x * scaleX && mouseX <= (Credits.dstRect.x + Credits.dstRect.w) * scaleX && mouseY >= Credits.dstRect.y * scaleY && mouseY <= (Credits.dstRect.y + Credits.dstRect.h) * scaleY)
 					{
 						menu.isCredits = true;
-						Credit(menu, Back);
+						Credit();
 					}
 
 					if (mouseX >= Exit.dstRect.x * scaleX && mouseX <= (Exit.dstRect.x + Exit.dstRect.w) * scaleX && mouseY >= Exit.dstRect.y * scaleY && mouseY <= (Exit.dstRect.y + Exit.dstRect.h) * scaleY)
@@ -117,6 +120,8 @@ void StartMenu(Menu& menu, MenuButtons& StartGame, MenuButtons& ContinueGame, Me
 			}
 		}
 		SDL_RenderCopy(ren, menu.backgroundTexture, &menu.backgroundRect, NULL);
+
+		//UpdateText(StartGame.text, StartGame.stringText, font, StartGame.textRect, StartGame.dstRect, StartGame.colour);
 
 		SDL_DestroyTexture(StartGame.text);
 		StartGame.text = GenerateTextureText(StartGame.stringText, font, &StartGame.textRect, StartGame.colour);
@@ -152,7 +157,7 @@ void StartMenu(Menu& menu, MenuButtons& StartGame, MenuButtons& ContinueGame, Me
 	TTF_CloseFont(font);
 }
 
-void Credit(Menu& menu, MenuButtons& Back)
+void Credit()
 {
 	TTF_Font* font = TTF_OpenFont("Monocraft.ttf", 100);
 
@@ -263,7 +268,7 @@ void Credit(Menu& menu, MenuButtons& Back)
 	TTF_CloseFont(font);
 }
 
-void HeroChoice(Menu& menu, MenuButtons& ChooseEnchantress, MenuButtons& ChooseKnight, Character& character)
+void HeroChoice()
 {
 	SDL_RenderClear(ren);
 	menu.backgroundTexture = LoadTexture("Menu\\MenuBackground.png", &menu.backgroundRect);
@@ -393,9 +398,11 @@ void HeroChoice(Menu& menu, MenuButtons& ChooseEnchantress, MenuButtons& ChooseK
 	menu.backgroundTexture = NULL;
 
 	TTF_CloseFont(font);
+
+	Mix_FreeChunk(audio.music);
 }
 
-void ResumeMenu(Menu& menu, MenuButtons& ResumeGame, MenuButtons& ReturnToMainMenu, MenuButtons& Exit)
+void ResumeMenu()
 {
 	SDL_RenderClear(ren);
 	menu.backgroundTexture = LoadTexture("Menu\\MenuBackground.png", &menu.backgroundRect);

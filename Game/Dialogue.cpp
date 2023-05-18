@@ -16,11 +16,6 @@ void Dialogue(DialogueBox& dialogueBox)
 	dialogueBox.boxTexture = LoadTexture("Assets\\Box.png", &dialogueBox.boxTextureRect);
 	SDL_RenderCopy(ren, dialogueBox.boxTexture, &dialogueBox.boxTextureRect, &dialogueBox.boxDstRect);
 
-	//SDL_RenderDrawRect(ren, &dialogueBox.dstRect1);
-	//SDL_RenderDrawRect(ren, &dialogueBox.dstRect2);
-	//SDL_RenderDrawRect(ren, &dialogueBox.dstRect3);
-	//SDL_RenderDrawRect(ren, &dialogueBox.dstRect4);
-
 	TTF_Font* font = TTF_OpenFont("Monocraft.ttf", 100);
 
 	switch (npc.rects[npc.index].type)
@@ -39,6 +34,20 @@ void Dialogue(DialogueBox& dialogueBox)
 			strcpy_s(dialogueBox.stringText2, 40, "                                     ");
 			strcpy_s(dialogueBox.stringText3, 40, "Give food to the beggar              ");
 			strcpy_s(dialogueBox.stringText4, 40, "Ignore him                           ");
+			break;
+		default:
+			state.isDialouge = false;
+			state.isGaming = true;
+		}
+		break;
+	case 12:
+		switch (dialogueBox.progress)
+		{
+		case 0:
+			strcpy_s(dialogueBox.stringText1, 40, "Wanderer, do you mind telling me     ");
+			strcpy_s(dialogueBox.stringText2, 40, "your story? Everybody will know you! ");
+			strcpy_s(dialogueBox.stringText3, 40, "Tell about your adventure            ");
+			strcpy_s(dialogueBox.stringText4, 40, "Maybe next time                      ");
 			break;
 		default:
 			state.isDialouge = false;

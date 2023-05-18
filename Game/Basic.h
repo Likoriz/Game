@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <iostream>
 
 #define DEFAULTSCALE 1.5f
@@ -25,6 +26,13 @@ struct Time
 };
 extern Time timer;
 
+struct Audio
+{
+	Mix_Chunk* music = NULL;
+	Mix_Chunk* sound = NULL;
+};
+extern Audio audio;
+
 SDL_Texture* LoadTexture(const char* filename, SDL_Rect* rect);
 
 SDL_Texture* GenerateTextureText(const char* text, TTF_Font* font, SDL_Rect* area, SDL_Color colour);
@@ -34,3 +42,7 @@ struct Character;
 void Init();
 
 void DeInit(int error);
+
+void PlayMusic(const char filename[]);
+
+void UpdateText(SDL_Texture* texture, char text[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour);

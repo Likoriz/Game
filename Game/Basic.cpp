@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include "Basic.h"
 
@@ -36,6 +37,7 @@ void DeInit(int error)
 		SDL_DestroyRenderer(ren);
 	if (win != NULL)
 		SDL_DestroyWindow(win);
+	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -70,6 +72,13 @@ void Init()
 		DeInit(1);
 	}
 
+	if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_FLAC | MIX_INIT_MID | MIX_INIT_MOD | MIX_INIT_OGG | MIX_INIT_OPUS) == 0)
+	{
+		printf("Couldn't init SDL_mixer! Error: %s", Mix_GetError());
+		system("pause");
+		DeInit(1);
+	}
+
 	win = SDL_CreateWindow("Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winWidth, winHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (win == NULL)
 	{
@@ -85,4 +94,23 @@ void Init()
 		system("pause");
 		DeInit(1);
 	}
+}
+
+void PlayMusic(const char filename[])
+{
+	audio.music = Mix_LoadWAV(filename);
+	if (!audio.music)
+		printf("%s\n", Mix_GetError());
+
+	Mix_VolumeChunk(audio.music, 64);
+
+	if (Mix_PlayChannel(-1, audio.music, -1) < 0)
+		printf("%s\n", Mix_GetError());
+}
+
+void UpdateText(SDL_Texture* texture, char stringText[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour)
+{
+	SDL_DestroyTexture(texture);
+	texture = GenerateTextureText(stringText, font, &textRect, colour);
+	SDL_RenderCopyF(ren, texture, &textRect, &textDstRect);
 }

@@ -8,9 +8,8 @@
 #include "NPCAnimation.h"
 #include "Basic.h"
 #include "Dialogue.h"
-//aefosovbeuw
-//oilkbilgbkhv
-//o;hljvkxjgchvkjblkn
+#include <SDL_mixer.h>
+
 SDL_Window* win = NULL;
 SDL_Renderer* ren = NULL;
 
@@ -22,10 +21,14 @@ float scaleY = DEFAULTSCALE;
 
 GameState state;
 Time timer;
+Audio audio;
 
 int main(int argc, char* argv[])
 {
 	Init();
+
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
+		printf("%s\n", Mix_GetError());
 
 	SDL_Event event;
 	double minS = 0;
@@ -34,9 +37,9 @@ int main(int argc, char* argv[])
 	winWidth /= scaleX;
 	winHeight /= scaleY;
 
-	StartMenu(menu, StartGame, ContinueGame, Credits, Exit);
+	StartMenu();
 	if (menu.isHeroChoice)
-		HeroChoice(menu, ChooseEnchantress, ChooseKnight, character);
+		HeroChoice();
 
 	if (character.isEnchantress)
 	{
@@ -60,6 +63,8 @@ int main(int argc, char* argv[])
 	LoadMap(map, tile, hitbox, npc);
 
 	bool isp = true;
+
+	PlayMusic("Music\\Usual.wav");
 
 	while (menu.isRunning)
 	{
@@ -91,7 +96,7 @@ int main(int argc, char* argv[])
 					case SDL_SCANCODE_D: character.isRight = true; character.isIdle = false;								break;
 					case SDL_SCANCODE_A: character.isLeft = true; character.isIdle = false;									break;
 					case SDL_SCANCODE_LSHIFT: character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
-					case SDL_SCANCODE_E: 
+					case SDL_SCANCODE_E:
 						minS = CheckNPC(npc);
 						if (minS <= MINSFROMNPC)
 						{
@@ -101,13 +106,14 @@ int main(int argc, char* argv[])
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						menu.isOpen = true;
-						ResumeMenu(menu, ResumeGame, ReturnToMainMenu, Exit);
+						ResumeMenu();
 						if (menu.isReturn)
 						{
 							menu.isReturn = false;
-							StartMenu(menu, StartGame, ContinueGame, Credits, Exit);
+							Mix_FreeChunk(audio.music);
+							StartMenu();
 							if (menu.isHeroChoice)
-								HeroChoice(menu, ChooseEnchantress, ChooseKnight, character);
+								HeroChoice();
 
 							if (character.isEnchantress)
 							{
@@ -126,6 +132,8 @@ int main(int argc, char* argv[])
 							character.playerRect.h = 128;
 							character.x = 150;
 							character.y = 2000;
+
+							PlayMusic("Music\\Usual.wav");
 						}
 						timer.lastTime = SDL_GetTicks();
 					}
@@ -136,8 +144,6 @@ int main(int argc, char* argv[])
 					{
 					case SDL_SCANCODE_SPACE:
 						dialogueBox.progress++;
-						//state.isDialouge = false;
-						//state.isGaming = true;
 						break;
 					}
 				}
@@ -195,6 +201,8 @@ int main(int argc, char* argv[])
 
 	SDL_DestroyTexture(character.playerTexture);
 	DeleteMap(map, tile, hitbox);
+
+	Mix_CloseAudio();
 
 	DeInit(0);
 

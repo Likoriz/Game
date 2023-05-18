@@ -36,7 +36,7 @@ extern MenuButtons Credits;
 extern MenuButtons Back;
 extern MenuButtons Exit;
 
-void StartMenu(Menu& menu, MenuButtons& StartGame, MenuButtons& ContinueGame, MenuButtons& Credits, MenuButtons& Exit);
-void HeroChoice(Menu& menu, MenuButtons& ChooseEnchantress, MenuButtons& ChooseKnight, Character& character);
-void ResumeMenu(Menu& menu, MenuButtons& ResumeGame, MenuButtons& ReturnToMainMenu, MenuButtons& Exit);
-void Credit(Menu& menu, MenuButtons& Back);
+void StartMenu();
+void HeroChoice();
+void ResumeMenu();
+void Credit();
