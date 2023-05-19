@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 						if (menu.isReturn)
 						{
 							menu.isReturn = false;
-							Mix_FreeChunk(audio.music);
+							Mix_FreeMusic(audio.music);
 							StartMenu();
 							if (menu.isHeroChoice)
 								HeroChoice();
@@ -164,12 +164,17 @@ int main(int argc, char* argv[])
 					switch (event.button.button)
 					{
 					case SDL_BUTTON_LEFT:
+						PlaySound("Music\\FastSwing.wav");
 						character.isAttack = true;
 						character.countAttack++;
 						if (character.countAttack == 2)
 							character.countAttack = 0;
 						break;
 					case SDL_BUTTON_RIGHT:
+						if (character.isEnchantress)
+							PlaySound("Music\\Spell.wav");
+						else
+							PlaySound("Music\\SeveralSwings.wav");
 						character.isUlt = true;
 						break;
 					}
@@ -190,6 +195,11 @@ int main(int argc, char* argv[])
 
 		if (state.isGaming)
 			Motion();
+
+		if (character.animation && !Mix_Playing(-1))
+			PlaySound("Music\\Step.wav");
+		//else
+			//Mix_FreeChunk(audio.sound);
 
 		Animation();
 

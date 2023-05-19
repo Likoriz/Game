@@ -399,7 +399,7 @@ void HeroChoice()
 
 	TTF_CloseFont(font);
 
-	Mix_FreeChunk(audio.music);
+	Mix_FreeMusic(audio.music);
 }
 
 void ResumeMenu()

@@ -28,7 +28,7 @@ extern Time timer;
 
 struct Audio
 {
-	Mix_Chunk* music = NULL;
+	Mix_Music* music = NULL;
 	Mix_Chunk* sound = NULL;
 };
 extern Audio audio;
@@ -44,5 +44,7 @@ void Init();
 void DeInit(int error);
 
 void PlayMusic(const char filename[]);
+
+void PlaySound(const char filename[]);
 
 void UpdateText(SDL_Texture* texture, char text[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour);

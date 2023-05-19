@@ -98,13 +98,26 @@ void Init()
 
 void PlayMusic(const char filename[])
 {
-	audio.music = Mix_LoadWAV(filename);
+	audio.music = Mix_LoadMUS(filename);
+
 	if (!audio.music)
 		printf("%s\n", Mix_GetError());
 
-	Mix_VolumeChunk(audio.music, 64);
+	Mix_VolumeMusic(64);
 
-	if (Mix_PlayChannel(-1, audio.music, -1) < 0)
+	if (Mix_PlayMusic(audio.music, -1) < 0)
+		printf("%s\n", Mix_GetError());
+}
+
+void PlaySound(const char filename[])
+{
+	audio.sound = Mix_LoadWAV(filename);
+	if (!audio.sound)
+		printf("%s\n", Mix_GetError());
+
+	Mix_VolumeChunk(audio.sound, 64);
+
+	if (Mix_PlayChannel(-1, audio.sound, 0) < 0)
 		printf("%s\n", Mix_GetError());
 }
 
