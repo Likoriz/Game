@@ -54,7 +54,7 @@ void Motion()
 	if ((tmpy >= winHeight * 1.f / 2) && (tmpy < tile.dstTile.h * map.heightR - winHeight * 1.f / 2))
 		character.destinationRect.y = (float)winHeight / 2;
 	
-	character.animation = character.isUp || character.isDown || character.isRight || character.isLeft;
+	character.isMoving = character.isUp || character.isDown || character.isRight || character.isLeft;
 
 	character.playerHitbox.x = character.destinationRect.x + 45;
 	character.playerHitbox.y = character.destinationRect.y + 109;
@@ -137,7 +137,82 @@ void Motion()
 
 void Animation()
 {
-	if (character.animation)
+	static int alltime = 0;
+	alltime += timer.dt;
+
+	if (character.isMoving)
+		character.animation = MOVING;
+	else
+		character.animation = IDLE;
+
+	switch (character.animation)
+	{
+	case IDLE:
+		character.playerRect.y = 0;
+		character.frameCount = 10;
+		character.maxFrametime = 1000 / character.frameCount;
+		character.currentFrametime += timer.dt;
+		if (character.currentFrametime >= character.maxFrametime)
+		{
+			character.currentFrametime -= character.maxFrametime;
+			character.frame = (character.frame + 1) % character.frameCount;
+			character.playerRect.x = character.playerRect.w * character.frame;
+		}
+		break;
+	case MOVING:
+		if (character.boostSpeed)
+			character.playerRect.y = character.playerRect.h * 2;
+		else
+			character.playerRect.y = character.playerRect.h;
+		character.frameCount = 8;
+		character.maxFrametime = 1000 / character.frameCount;
+		character.currentFrametime += timer.dt;
+		if (character.currentFrametime >= character.maxFrametime)
+		{
+			character.currentFrametime -= character.maxFrametime;
+			character.frame = (character.frame + 1) % character.frameCount;
+			character.playerRect.x = character.playerRect.w * character.frame;
+		}
+		break;
+	case ATTACK:
+		if (character.countAttack == 1)
+			character.playerRect.y = character.playerRect.h * 4;
+		else
+			character.playerRect.y = character.playerRect.h * 5;
+		character.frameCount = 6;
+		character.maxFrametime = 1000 / character.frameCount;
+		character.currentFrametime += timer.dt;
+		if (character.currentFrametime >= character.maxFrametime)
+		{
+			character.currentFrametime -= character.maxFrametime;
+			character.frame = character.frame + 1;
+			character.playerRect.x = character.playerRect.w * character.frame;
+		}
+		if (character.frame == character.frameCount)
+		{
+			//character.isAttack = false;
+			character.frame = 0;
+		}
+		break;
+	case ULT:
+		character.playerRect.y = character.playerRect.h * 6;
+		character.frameCount = 9;
+		character.maxFrametime = 1000 / character.frameCount;
+		character.currentFrametime += timer.dt;
+		if (character.currentFrametime >= character.maxFrametime)
+		{
+			character.currentFrametime -= character.maxFrametime;
+			character.frame = character.frame + 1;
+			character.playerRect.x = character.playerRect.w * character.frame;
+		}
+		else
+			if (character.frame == character.frameCount)
+			{
+				//character.isUlt = false;
+				character.frame = 0;
+			}
+	}
+	/*if (character.isMoving)
 	{
 		if (character.boostSpeed)
 			character.playerRect.y = character.playerRect.h * 2;
@@ -180,10 +255,9 @@ void Animation()
 		if (character.currentFrametime >= character.maxFrametime)
 		{
 			character.currentFrametime -= character.maxFrametime;
-			character.frame = (character.frame + 1) % character.frameCount;
+			character.frame = character.frame + 1;
 			character.playerRect.x = character.playerRect.w * character.frame;
 		}
-		else
 			if (character.frame == character.frameCount)
 				character.isAttack = false;
 	}
@@ -203,7 +277,7 @@ void Animation()
 		else
 			if (character.frame == character.frameCount)
 				character.isUlt = false;
-	}
+	}*/
 	if (character.direction == LEFT)
 		SDL_RenderCopyExF(ren, character.playerTexture, &character.playerRect, &character.destinationRect, NULL, NULL, SDL_FLIP_HORIZONTAL);
 	else

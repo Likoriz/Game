@@ -103,27 +103,27 @@ void PlayMusic(const char filename[])
 	if (!audio.music)
 		printf("%s\n", Mix_GetError());
 
-	Mix_VolumeMusic(64);
+	Mix_VolumeMusic(32);
 
 	if (Mix_PlayMusic(audio.music, -1) < 0)
 		printf("%s\n", Mix_GetError());
 }
 
-void PlaySound(const char filename[])
+void PlaySound(const char filename[], int channel)
 {
 	audio.sound = Mix_LoadWAV(filename);
 	if (!audio.sound)
 		printf("%s\n", Mix_GetError());
 
-	Mix_VolumeChunk(audio.sound, 64);
+	Mix_VolumeChunk(audio.sound, 32);
 
-	if (Mix_PlayChannel(-1, audio.sound, 0) < 0)
+	if (Mix_PlayChannel(channel, audio.sound, 0) < 0)
 		printf("%s\n", Mix_GetError());
 }
 
-void UpdateText(SDL_Texture* texture, char stringText[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour)
-{
-	SDL_DestroyTexture(texture);
-	texture = GenerateTextureText(stringText, font, &textRect, colour);
-	SDL_RenderCopyF(ren, texture, &textRect, &textDstRect);
-}
+//void UpdateText(SDL_Texture* texture, char stringText[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour)
+//{
+//	SDL_DestroyTexture(texture);
+//	texture = GenerateTextureText(stringText, font, &textRect, colour);
+//	SDL_RenderCopyF(ren, texture, &textRect, &textDstRect);
+//}

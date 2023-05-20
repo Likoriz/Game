@@ -46,6 +46,7 @@ void StartMenu()
 
 	SDL_Event event;
 	int mouseX, mouseY;
+
 	while (menu.isStart)
 	{
 		while (SDL_PollEvent(&event))
@@ -59,24 +60,64 @@ void StartMenu()
 			case SDL_MOUSEMOTION:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				if (mouseX >= StartGame.dstRect.x * scaleX && mouseX <= (StartGame.dstRect.x + StartGame.dstRect.w) * scaleX && mouseY >= StartGame.dstRect.y * scaleY && mouseY <= (StartGame.dstRect.y + StartGame.dstRect.h) * scaleY)
+				{
 					StartGame.colour = { 180, 180, 180, 255 };
+					if (StartGame.soundCount < 1 && !Mix_Playing(0))
+					{
+						StartGame.soundCount++;
+						PlaySound("Music\\Button.wav", 0);
+					}
+				}
 				else
+				{
 					StartGame.colour = { 0, 0, 0, 255 };
+					StartGame.soundCount = 0;
+				}
 
 				if (mouseX >= ContinueGame.dstRect.x * scaleX && mouseX <= (ContinueGame.dstRect.x + ContinueGame.dstRect.w) * scaleX && mouseY >= ContinueGame.dstRect.y * scaleY && mouseY <= (ContinueGame.dstRect.y + ContinueGame.dstRect.h) * scaleY)
+				{
 					ContinueGame.colour = { 180, 180, 180, 255 };
+					if (ContinueGame.soundCount < 1 && !Mix_Playing(1))
+					{
+						ContinueGame.soundCount++;
+						PlaySound("Music\\Button.wav", 1);
+					}
+				}
 				else
+				{
 					ContinueGame.colour = { 0, 0, 0, 255 };
+					ContinueGame.soundCount = 0;
+				}
 
 				if (mouseX >= Credits.dstRect.x * scaleX && mouseX <= (Credits.dstRect.x + Credits.dstRect.w) * scaleX && mouseY >= Credits.dstRect.y * scaleY && mouseY <= (Credits.dstRect.y + Credits.dstRect.h) * scaleY)
+				{
 					Credits.colour = { 180, 180, 180, 255 };
+					if (Credits.soundCount < 1 && !Mix_Playing(2))
+					{
+						Credits.soundCount++;
+						PlaySound("Music\\Button.wav", 2);
+					}
+				}
 				else
+				{
 					Credits.colour = { 0, 0, 0, 255 };
+					Credits.soundCount = 0;
+				}
 
 				if (mouseX >= Exit.dstRect.x * scaleX && mouseX <= (Exit.dstRect.x + Exit.dstRect.w) * scaleX && mouseY >= Exit.dstRect.y * scaleY && mouseY <= (Exit.dstRect.y + Exit.dstRect.h) * scaleY)
+				{
 					Exit.colour = { 180, 180, 180, 255 };
+					if (Exit.soundCount < 1 && !Mix_Playing(3))
+					{
+						Exit.soundCount++;
+						PlaySound("Music\\Button.wav", 3);
+					}
+				}
 				else
+				{
 					Exit.colour = { 0, 0, 0, 255 };
+					Exit.soundCount = 0;
+				}
 			case SDL_MOUSEBUTTONDOWN:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				switch (event.button.button)
@@ -207,9 +248,19 @@ void Credit()
 			case SDL_MOUSEMOTION:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				if (mouseX >= Back.dstRect.x * scaleX && mouseX <= (Back.dstRect.x + Back.dstRect.w) * scaleX && mouseY >= Back.dstRect.y * scaleY && mouseY <= (Back.dstRect.y + Back.dstRect.h) * scaleY)
+				{
 					Back.colour = { 180, 180, 180, 255 };
+					if (Back.soundCount < 1 && !Mix_Playing(0))
+					{
+						PlaySound("Music\\Button.wav", 0);
+						Back.soundCount++;
+					}
+				}
 				else
+				{
 					Back.colour = { 0, 0, 0, 255 };
+					Back.soundCount = 0;
+				}
 			case SDL_MOUSEBUTTONDOWN:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				switch (event.button.button)
@@ -311,12 +362,29 @@ void HeroChoice()
 			case SDL_MOUSEMOTION:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				if (mouseX >= ChooseEnchantress.dstRect.x * scaleX && mouseX <= (ChooseEnchantress.dstRect.x + ChooseEnchantress.dstRect.w) * scaleX && mouseY >= ChooseEnchantress.dstRect.y * scaleY && mouseY <= (ChooseEnchantress.dstRect.y + ChooseEnchantress.dstRect.h) * scaleY)
+				{
 					ChooseEnchantress.colour = { 180, 180, 180, 255 };
+					if (ChooseEnchantress.soundCount < 1 && !Mix_Playing(0))
+					{
+						PlaySound("Music\\Button.wav", 0);
+						ChooseEnchantress.soundCount++;
+					}
+				}
 				else
+				{
 					ChooseEnchantress.colour = { 0, 0, 0, 255 };
+					ChooseEnchantress.soundCount = 0;
+				}
 
 				if (mouseX >= ChooseKnight.dstRect.x * scaleX && mouseX <= (ChooseKnight.dstRect.x + ChooseKnight.dstRect.w) * scaleX && mouseY >= ChooseKnight.dstRect.y * scaleY && mouseY <= (ChooseKnight.dstRect.y + ChooseKnight.dstRect.h) * scaleY)
+				{
 					ChooseKnight.colour = { 180, 180, 180, 255 };
+					if (ChooseKnight.soundCount < 1 && !Mix_Playing(1))
+					{
+						PlaySound("Music\\Button.wav", 1);
+						ChooseKnight.soundCount = 0;
+					}
+				}
 				else
 					ChooseKnight.colour = { 0, 0, 0, 255 };
 			case SDL_MOUSEBUTTONDOWN:
@@ -392,10 +460,16 @@ void HeroChoice()
 	SDL_DestroyTexture(ChooseKnight.text);
 
 	SDL_DestroyTexture(enchantressPNG);
+	enchantressPNG = NULL;
+
 	SDL_DestroyTexture(knightPNG);
+	knightPNG = NULL;
 
 	SDL_DestroyTexture(menu.backgroundTexture);
 	menu.backgroundTexture = NULL;
+
+	ChooseEnchantress.text = NULL;
+	ChooseKnight.text = NULL;
 
 	TTF_CloseFont(font);
 
@@ -443,19 +517,49 @@ void ResumeMenu()
 			case SDL_MOUSEMOTION:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				if (mouseX >= ResumeGame.dstRect.x * scaleX && mouseX <= (ResumeGame.dstRect.x + ResumeGame.dstRect.w) * scaleX && mouseY >= ResumeGame.dstRect.y * scaleY && mouseY <= (ResumeGame.dstRect.y + ResumeGame.dstRect.h) * scaleY)
+				{
 					ResumeGame.colour = { 180, 180, 180, 255 };
+					if (ResumeGame.soundCount < 1 && !Mix_Playing(0))
+					{
+						PlaySound("Music\\Button.wav", 0);
+						ResumeGame.soundCount++;
+					}
+				}
 				else
+				{
 					ResumeGame.colour = { 0, 0, 0, 255 };
+					ResumeGame.soundCount = 0;
+				}
 
 				if (mouseX >= ReturnToMainMenu.dstRect.x * scaleX && mouseX <= (ReturnToMainMenu.dstRect.x + ReturnToMainMenu.dstRect.w) * scaleX && mouseY >= ReturnToMainMenu.dstRect.y * scaleY && mouseY <= (ReturnToMainMenu.dstRect.y + ReturnToMainMenu.dstRect.h) * scaleY)
+				{
 					ReturnToMainMenu.colour = { 180, 180, 180, 255 };
+					if (ReturnToMainMenu.soundCount < 1 && !Mix_Playing(1))
+					{
+						PlaySound("Music\\Button.wav", 1);
+						ReturnToMainMenu.soundCount++;
+					}
+				}
 				else
+				{
 					ReturnToMainMenu.colour = { 0, 0, 0, 255 };
+					ReturnToMainMenu.soundCount = 0;
+				}
 
 				if (mouseX >= Exit.dstRect.x * scaleX && mouseX <= (Exit.dstRect.x + Exit.dstRect.w) * scaleX && mouseY >= Exit.dstRect.y * scaleY && mouseY <= (Exit.dstRect.y + Exit.dstRect.h) * scaleY)
+				{
 					Exit.colour = { 180, 180, 180, 255 };
+					if (Exit.soundCount < 1 && !Mix_Playing(2))
+					{
+						PlaySound("Music\\Button.wav", 2);
+						Exit.soundCount++;
+					}
+				}
 				else
+				{
 					Exit.colour = { 0, 0, 0, 255 };
+					Exit.soundCount = 0;
+				}
 			case SDL_MOUSEBUTTONDOWN:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				switch (event.button.button)

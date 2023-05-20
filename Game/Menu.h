@@ -25,6 +25,7 @@ struct MenuButtons
 	char stringText[100] = "";
 	SDL_Rect textRect;
 	SDL_Texture* text = NULL;
+	int soundCount = 0;
 };
 extern MenuButtons StartGame;
 extern MenuButtons ChooseEnchantress;

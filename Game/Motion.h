@@ -17,21 +17,25 @@ struct Character
 	float x = 150, y = 2000, speed = 150;// x=150, y=2000 // 2500 1500
 
 	int frame = 0, frameCount = 0, currentFrametime = 0, maxFrametime = 0;
-	bool animation = false;
+	bool isMoving = false;
 
 	bool isUp = false, isDown = false, isRight = false, isLeft = false;
 
 	int direction = RIGHT;
 	bool boostSpeed = false;
-	bool isAttack = false;
+	//bool isAttack = false;
 	int countAttack = 0;
-	bool isUlt = false;
-	bool isIdle = true;
+	//bool isUlt = false;
+	//bool isIdle = true;
+
+	int animation = 0;
 
 	bool isEnchantress = false;
 	bool isKnight = false;
 }; 
 extern Character character;
+
+enum StateAnimation { IDLE = 0, MOVING = 1, ATTACK = 2, ULT = 3 };
 
 struct GameState
 {

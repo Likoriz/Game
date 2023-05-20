@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 {
 	Init();
 
-	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 4, 2048) < 0)
 		printf("%s\n", Mix_GetError());
 
 	SDL_Event event;
@@ -91,14 +91,30 @@ int main(int argc, char* argv[])
 				{
 					switch (event.key.keysym.scancode)
 					{
-					case SDL_SCANCODE_W: character.isUp = true;	character.isIdle = false;									break;
-					case SDL_SCANCODE_S: character.isDown = true; character.isIdle = false;									break;
-					case SDL_SCANCODE_D: character.isRight = true; character.isIdle = false;								break;
-					case SDL_SCANCODE_A: character.isLeft = true; character.isIdle = false;									break;
-					case SDL_SCANCODE_LSHIFT: character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
+					case SDL_SCANCODE_W:
+						//character.animation = MOVING; 
+						character.isUp = true;
+						break;//character.isUp = true;	character.isIdle = false;									break;
+					case SDL_SCANCODE_S:
+						//character.animation = MOVING; 
+						character.isDown = true;
+						break;//character.isDown = true; character.isIdle = false;									break;
+					case SDL_SCANCODE_D:
+						//character.animation = MOVING; 
+						character.isRight = true;
+						break;//character.isRight = true; character.isIdle = false;								break;
+					case SDL_SCANCODE_A:
+						//character.animation = MOVING; 
+						character.isLeft = true;
+						break;//character.isLeft = true; character.isIdle = false;									break;
+					case SDL_SCANCODE_LSHIFT:
+						//character.animation = MOVING; 
+						character.boostSpeed = true;
+						character.speed = 225;
+						break;//character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
 					case SDL_SCANCODE_E:
 						minS = CheckNPC();
-						if (minS <= MINSFROMNPC)
+						if (minS <= MINSFROMNPC && !character.isMoving)
 						{
 							state.isGaming = false;
 							state.isDialouge = true;
@@ -151,11 +167,26 @@ int main(int argc, char* argv[])
 			case SDL_KEYUP:
 				switch (event.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_W: character.isUp = false; character.isIdle = true;									break;
-				case SDL_SCANCODE_S: character.isDown = false; character.isIdle = true;									break;
-				case SDL_SCANCODE_D: character.isRight = false;	character.isIdle = true;								break;
-				case SDL_SCANCODE_A: character.isLeft = false; character.isIdle = true;									break;
-				case SDL_SCANCODE_LSHIFT: character.boostSpeed = false; character.speed = 150; character.isIdle = true; break;
+				case SDL_SCANCODE_W:
+					//character.animation = IDLE; 
+					character.isUp = false;
+					break;//character.isUp = false; character.isIdle = true;									break;
+				case SDL_SCANCODE_S:
+					//character.animation = IDLE; 
+					character.isDown = false;
+					break;//character.isDown = false; character.isIdle = true;									break;
+				case SDL_SCANCODE_D:
+					//character.animation = IDLE; 
+					character.isRight = false;
+					break;//character.isRight = false;	character.isIdle = true;								break;
+				case SDL_SCANCODE_A:
+					//character.animation = IDLE; 
+					character.isLeft = false;
+					break;//character.isLeft = false; character.isIdle = true;									break;
+				case SDL_SCANCODE_LSHIFT:
+					character.speed = 150;
+					character.boostSpeed = false;
+					break;//character.boostSpeed = false; character.speed = 150; character.isIdle = true; break;
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
@@ -164,18 +195,22 @@ int main(int argc, char* argv[])
 					switch (event.button.button)
 					{
 					case SDL_BUTTON_LEFT:
-						PlaySound("Music\\FastSwing.wav");
-						character.isAttack = true;
+						if (!Mix_Playing(1))
+							PlaySound("Music\\FastSwing.wav", 1);
+						character.animation = ATTACK;
+						//character.isAttack = true;
 						character.countAttack++;
 						if (character.countAttack == 2)
 							character.countAttack = 0;
 						break;
 					case SDL_BUTTON_RIGHT:
-						if (character.isEnchantress)
-							PlaySound("Music\\Spell.wav");
+						if (character.isEnchantress && !Mix_Playing(1))
+							PlaySound("Music\\Spell.wav", 1);
 						else
-							PlaySound("Music\\SeveralSwings.wav");
-						character.isUlt = true;
+							if (!Mix_Playing(1))
+								PlaySound("Music\\SeveralSwings.wav", 1);
+						character.animation = ULT;
+						//character.isUlt = true;
 						break;
 					}
 				}
@@ -196,8 +231,8 @@ int main(int argc, char* argv[])
 		if (state.isGaming)
 			Motion();
 
-		if (character.animation && !Mix_Playing(-1))
-			PlaySound("Music\\Step.wav");
+		if (character.isMoving && !Mix_Playing(0))
+			PlaySound("Music\\Step.wav", 0);
 		//else
 			//Mix_FreeChunk(audio.sound);
 
