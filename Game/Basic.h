@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include <limits.h>
 #include <iostream>
 
 #define DEFAULTSCALE 1.5f

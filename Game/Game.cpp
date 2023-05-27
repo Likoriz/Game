@@ -1,14 +1,9 @@
-﻿#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
-#include "Motion.h"
+﻿#include "Motion.h"
 #include "Menu.h"
 #include "Map.h"
 #include "NPCAnimation.h"
 #include "Basic.h"
 #include "Dialogue.h"
-#include <SDL_mixer.h>
 
 SDL_Window* win = NULL;
 SDL_Renderer* ren = NULL;
@@ -41,6 +36,12 @@ int main(int argc, char* argv[])
 	if (menu.isHeroChoice)
 		HeroChoice();
 
+	if (menu.isLoad)
+	{
+		LoadSave();
+		menu.isLoad = false;
+	}
+
 	if (character.isEnchantress)
 	{
 		SDL_DestroyTexture(character.playerTexture);
@@ -61,8 +62,6 @@ int main(int argc, char* argv[])
 	timer.lastTime = SDL_GetTicks();
 
 	LoadMap();
-
-	bool isp = true;
 
 	PlayMusic("Music\\Usual.wav");
 

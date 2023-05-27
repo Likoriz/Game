@@ -1,10 +1,7 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
 #include "Map.h"
 #include "Motion.h"
 #include "NPCAnimation.h"
+#include "Menu.h"
 #include "Basic.h"
 
 Map map;
@@ -12,9 +9,44 @@ TileSet tile;
 MapHitbox hitbox;
 NPC npc;
 
-void SaveMap()
+void Save()
 {
+	FILE* file;
+	if (fopen_s(&file, map.fileSavePath, "wt") == 0)
+	{
+		fprintf(file, "%d\n", map.level);
+		fprintf(file, "%f %f\n", character.x, character.y);
+		fprintf(file, "%d %d\n", character.isEnchantress, character.isKnight);
 
+		fclose(file);
+	}
+	else
+	{
+		printf("Couldn't open the save file!");
+		DeInit(1);
+	}
+}
+
+void LoadSave()
+{
+	FILE* file;
+	if (fopen_s(&file, map.fileSavePath, "rt") == 0)
+	{
+		fscanf_s(file, "%d", &map.level);
+		fscanf_s(file, "%f%f", &character.x, &character.y);
+
+		int enchantress = 0, knight = 0;
+		fscanf_s(file, "%d%d", &enchantress, &knight);
+		character.isEnchantress = enchantress;
+		character.isKnight = knight;
+
+		fclose(file);
+	}
+	else
+	{
+		printf("Couldn't open the save file!");
+		DeInit(1);
+	}
 }
 
 void LoadMap()

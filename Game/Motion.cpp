@@ -1,7 +1,3 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
 #include "Motion.h"
 #include "Map.h"
 #include "Basic.h"

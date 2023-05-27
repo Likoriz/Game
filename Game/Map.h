@@ -1,8 +1,4 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
 #include "NPCAnimation.h"
 #include "Basic.h"
 
@@ -15,6 +11,7 @@ struct Map
 	int level = 1;
 
 	char fileMapPath[30] = "";
+	char fileSavePath[30] = "Save\\save.txt";
 
 	FILE* file;
 };
@@ -49,7 +46,8 @@ struct TileSet
 };
 extern TileSet tile;
 
-void SaveMap();
+void Save();
+void LoadSave();
 void LoadMap();
 void UpdateMap();
 void DeleteMap();

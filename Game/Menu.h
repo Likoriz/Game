@@ -1,8 +1,4 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
 #include "Basic.h"
 
 struct Menu
@@ -10,6 +6,7 @@ struct Menu
 	SDL_Rect backgroundRect = {};
 	SDL_Texture* backgroundTexture = NULL;
 	bool isStart = true;
+	bool isLoad = false;
 	bool isHeroChoice = false;
 	bool isOpen = true;
 	bool isReturn = false;

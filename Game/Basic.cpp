@@ -103,7 +103,7 @@ void PlayMusic(const char filename[])
 	if (!audio.music)
 		printf("%s\n", Mix_GetError());
 
-	Mix_VolumeMusic(32);
+	Mix_VolumeMusic(16);
 
 	if (Mix_PlayMusic(audio.music, -1) < 0)
 		printf("%s\n", Mix_GetError());

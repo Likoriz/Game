@@ -1,9 +1,5 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <iostream>
-#include <limits.h>
 #include "Basic.h"
+#include "Map.h"
 #include "Dialogue.h"
 #include "NPCAnimation.h"
 #include "Motion.h"
@@ -47,6 +43,13 @@ void Dialogue()
 			strcpy_s(dialogueBox.stringText1, 40, "Wanderer, do you mind telling me     ");
 			strcpy_s(dialogueBox.stringText2, 40, "your story? Maybe it will become a   ");
 			strcpy_s(dialogueBox.stringText3, 40, "great legend someday!                ");
+			strcpy_s(dialogueBox.stringText4, 40, "                                     ");
+			break;
+		case 1:
+			Save();
+			strcpy_s(dialogueBox.stringText1, 40, "Game has been saved!                 ");
+			strcpy_s(dialogueBox.stringText2, 40, "                                     ");
+			strcpy_s(dialogueBox.stringText3, 40, "                                     ");
 			strcpy_s(dialogueBox.stringText4, 40, "                                     ");
 			break;
 		default:

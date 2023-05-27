@@ -1,8 +1,3 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <iostream>
 #include "Menu.h"
 #include "Basic.h"
 #include "Motion.h"
@@ -132,7 +127,9 @@ void StartMenu()
 					if (mouseX >= ContinueGame.dstRect.x * scaleX && mouseX <= (ContinueGame.dstRect.x + ContinueGame.dstRect.w) * scaleX && mouseY >= ContinueGame.dstRect.y * scaleY && mouseY <= (ContinueGame.dstRect.y + ContinueGame.dstRect.h) * scaleY)
 					{
 						menu.isStart = false;
-						menu.isHeroChoice = true;
+						//menu.isHeroChoice = true;
+						menu.isRunning = true;
+						menu.isLoad = true;
 					}
 
 					if (mouseX >= Credits.dstRect.x * scaleX && mouseX <= (Credits.dstRect.x + Credits.dstRect.w) * scaleX && mouseY >= Credits.dstRect.y * scaleY && mouseY <= (Credits.dstRect.y + Credits.dstRect.h) * scaleY)
