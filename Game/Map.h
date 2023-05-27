@@ -49,6 +49,7 @@ struct TileSet
 };
 extern TileSet tile;
 
+void SaveMap();
 void LoadMap();
 void UpdateMap();
 void DeleteMap();

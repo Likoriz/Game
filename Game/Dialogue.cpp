@@ -45,9 +45,9 @@ void Dialogue()
 		{
 		case 0:
 			strcpy_s(dialogueBox.stringText1, 40, "Wanderer, do you mind telling me     ");
-			strcpy_s(dialogueBox.stringText2, 40, "your story? Everybody will know you! ");
-			strcpy_s(dialogueBox.stringText3, 40, "Tell about your adventure            ");
-			strcpy_s(dialogueBox.stringText4, 40, "Maybe next time                      ");
+			strcpy_s(dialogueBox.stringText2, 40, "your story? Maybe it will become a   ");
+			strcpy_s(dialogueBox.stringText3, 40, "great legend someday!                ");
+			strcpy_s(dialogueBox.stringText4, 40, "                                     ");
 			break;
 		default:
 			state.isDialouge = false;

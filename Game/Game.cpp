@@ -168,25 +168,21 @@ int main(int argc, char* argv[])
 				switch (event.key.keysym.scancode)
 				{
 				case SDL_SCANCODE_W:
-					//character.animation = IDLE; 
 					character.isUp = false;
 					break;//character.isUp = false; character.isIdle = true;									break;
 				case SDL_SCANCODE_S:
-					//character.animation = IDLE; 
 					character.isDown = false;
 					break;//character.isDown = false; character.isIdle = true;									break;
 				case SDL_SCANCODE_D:
-					//character.animation = IDLE; 
 					character.isRight = false;
 					break;//character.isRight = false;	character.isIdle = true;								break;
 				case SDL_SCANCODE_A:
-					//character.animation = IDLE; 
 					character.isLeft = false;
 					break;//character.isLeft = false; character.isIdle = true;									break;
 				case SDL_SCANCODE_LSHIFT:
 					character.speed = 150;
 					character.boostSpeed = false;
-					break;//character.boostSpeed = false; character.speed = 150; character.isIdle = true; break;
+					break;// character.isIdle = true; break;
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
@@ -197,8 +193,9 @@ int main(int argc, char* argv[])
 					case SDL_BUTTON_LEFT:
 						if (!Mix_Playing(1))
 							PlaySound("Music\\FastSwing.wav", 1);
-						character.animation = ATTACK;
 						//character.isAttack = true;
+						character.animation = ATTACK;
+						character.animationNew = ATTACK;
 						character.countAttack++;
 						if (character.countAttack == 2)
 							character.countAttack = 0;
@@ -210,6 +207,7 @@ int main(int argc, char* argv[])
 							if (!Mix_Playing(1))
 								PlaySound("Music\\SeveralSwings.wav", 1);
 						character.animation = ULT;
+						character.animationNew = ULT;
 						//character.isUlt = true;
 						break;
 					}
@@ -233,13 +231,13 @@ int main(int argc, char* argv[])
 
 		if (character.isMoving && !Mix_Playing(0))
 			PlaySound("Music\\Step.wav", 0);
-		//else
-			//Mix_FreeChunk(audio.sound);
 
 		Animation();
 
 		if (state.isDialouge)
 			Dialogue();
+
+		character.animationOld = character.animationNew;
 
 		SDL_RenderPresent(ren);
 	}

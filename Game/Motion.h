@@ -29,6 +29,8 @@ struct Character
 	//bool isIdle = true;
 
 	int animation = 0;
+	int animationOld = 0;
+	int animationNew = 0;
 
 	bool isEnchantress = false;
 	bool isKnight = false;

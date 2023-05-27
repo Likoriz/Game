@@ -12,6 +12,11 @@ TileSet tile;
 MapHitbox hitbox;
 NPC npc;
 
+void SaveMap()
+{
+
+}
+
 void LoadMap()
 {
 	switch (map.level)

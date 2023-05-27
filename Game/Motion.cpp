@@ -38,7 +38,7 @@ void Motion()
 	if (tmpx >= tile.dstTile.w * map.widthC - winWidth * 1.f / 2)
 	{
 		character.destinationRect.x = tmpx;
-		while (character.destinationRect.x >= winWidth) 
+		while (character.destinationRect.x >= winWidth)
 			character.destinationRect.x -= (tile.dstTile.w * map.widthC - winWidth * 1.f / 2) - winWidth * 1.f / 2;
 	}
 
@@ -53,7 +53,7 @@ void Motion()
 		character.destinationRect.x = (float)winWidth / 2;
 	if ((tmpy >= winHeight * 1.f / 2) && (tmpy < tile.dstTile.h * map.heightR - winHeight * 1.f / 2))
 		character.destinationRect.y = (float)winHeight / 2;
-	
+
 	character.isMoving = character.isUp || character.isDown || character.isRight || character.isLeft;
 
 	character.playerHitbox.x = character.destinationRect.x + 45;
@@ -64,9 +64,9 @@ void Motion()
 	for (int i = 0; i < hitbox.count; i++)
 	{
 		if (character.isLeft)
-			if (character.playerHitbox.x >= hitbox.hitboxes[i].x 
-				&& character.playerHitbox.x <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w) 
-				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 2) 
+			if (character.playerHitbox.x >= hitbox.hitboxes[i].x
+				&& character.playerHitbox.x <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w)
+				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 2)
 				&& character.playerHitbox.y < (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h - 2))
 			{
 				/*system("cls");
@@ -78,7 +78,7 @@ void Motion()
 		if (character.isUp)
 			if ((character.playerHitbox.x > hitbox.hitboxes[i].x || character.playerHitbox.x + character.playerHitbox.w > hitbox.hitboxes[i].x + 2)
 				&& character.playerHitbox.x < (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w - 2)
-				&& character.playerHitbox.y >= hitbox.hitboxes[i].y 
+				&& character.playerHitbox.y >= hitbox.hitboxes[i].y
 				&& character.playerHitbox.y <= (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h))
 			{
 				/*system("cls");
@@ -88,9 +88,9 @@ void Motion()
 				break;
 			}
 		if (character.isRight)
-			if ((character.playerHitbox.x + character.playerHitbox.w >= hitbox.hitboxes[i].x 
-				&& character.playerHitbox.x + character.playerHitbox.w <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w) 
-				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 2) 
+			if ((character.playerHitbox.x + character.playerHitbox.w >= hitbox.hitboxes[i].x
+				&& character.playerHitbox.x + character.playerHitbox.w <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w)
+				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 2)
 				&& character.playerHitbox.y < (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h - 2)))
 			{
 				/*system("cls");
@@ -101,9 +101,9 @@ void Motion()
 			}
 		if (character.isDown)
 		{
-			if ((character.playerHitbox.x > hitbox.hitboxes[i].x || character.playerHitbox.x + character.playerHitbox.w > hitbox.hitboxes[i].x + 2) 
-				&& character.playerHitbox.x < (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w - 2) 
-				&& character.playerHitbox.y + character.playerHitbox.h >= hitbox.hitboxes[i].y 
+			if ((character.playerHitbox.x > hitbox.hitboxes[i].x || character.playerHitbox.x + character.playerHitbox.w > hitbox.hitboxes[i].x + 2)
+				&& character.playerHitbox.x < (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w - 2)
+				&& character.playerHitbox.y + character.playerHitbox.h >= hitbox.hitboxes[i].y
 				&& character.playerHitbox.y + character.playerHitbox.h <= (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h))
 			{
 				/*system("cls");
@@ -140,12 +140,25 @@ void Animation()
 	static int alltime = 0;
 	alltime += timer.dt;
 
-	if (character.isMoving)
+	if (character.isMoving && character.animation != ATTACK && character.animation != ULT)
+	{
 		character.animation = MOVING;
+		character.animationNew = MOVING;
+	}
 	else
-		character.animation = IDLE;
+		if (character.animation != ATTACK && character.animation != ULT)
+		{
+			character.animation = IDLE;
+			character.animationNew = IDLE;
+		}
 
-	switch (character.animation)
+	if (character.animationNew != character.animationOld)
+	{
+		character.currentFrametime = 0;
+		character.frame = 0;
+	}
+
+	switch (character.animationNew)
 	{
 	case IDLE:
 		character.playerRect.y = 0;
@@ -188,15 +201,18 @@ void Animation()
 			character.frame = character.frame + 1;
 			character.playerRect.x = character.playerRect.w * character.frame;
 		}
-		if (character.frame == character.frameCount)
-		{
-			//character.isAttack = false;
-			character.frame = 0;
-		}
+		else
+			if (character.frame == character.frameCount)
+			{
+				//character.isAttack = false;
+				character.animationNew = IDLE;
+				character.currentFrametime = 0;
+				character.frame = 0;
+			}
 		break;
 	case ULT:
 		character.playerRect.y = character.playerRect.h * 6;
-		character.frameCount = 9;
+		character.frameCount = 10;
 		character.maxFrametime = 1000 / character.frameCount;
 		character.currentFrametime += timer.dt;
 		if (character.currentFrametime >= character.maxFrametime)
@@ -209,6 +225,8 @@ void Animation()
 			if (character.frame == character.frameCount)
 			{
 				//character.isUlt = false;
+				character.animationNew = IDLE;
+				character.currentFrametime = 0;
 				character.frame = 0;
 			}
 	}
@@ -265,7 +283,7 @@ void Animation()
 	if (character.isUlt)
 	{
 		character.playerRect.y = character.playerRect.h * 6;
-		character.frameCount = 9;
+		character.frameCount = 8;
 		character.maxFrametime = 1000 / character.frameCount;
 		character.currentFrametime += timer.dt;
 		if (character.currentFrametime >= character.maxFrametime)
