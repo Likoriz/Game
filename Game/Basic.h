@@ -48,4 +48,4 @@ void PlayMusic(const char filename[]);
 
 void PlaySound(const char filename[], int channel);
 
-double CheckInteraction();
+double CheckNPC();

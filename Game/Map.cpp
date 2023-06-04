@@ -190,8 +190,11 @@ void UpdateMap()
 
 				switch (hitbox.hitboxesCode[i][j])
 				{
+				case -1:
+					entrance.rects[entranceCount].type = 1;
+					break;
 				case -2:
-					entrance.rects[entranceCount].type = -2;
+					entrance.rects[entranceCount].type = 2;
 					break;
 				}
 				barrierCount++;
@@ -286,7 +289,7 @@ void UpdateMap()
 		}
 		tile.dstTile.y += tile.dstTile.h;
 	}
-	//SDL_RenderDrawRects(ren, hitbox.hitboxes, hitbox.count);
+	SDL_RenderDrawRects(ren, hitbox.hitboxes, hitbox.count);
 }
 
 void DeleteMap()

@@ -88,7 +88,7 @@ void Dialogue()
 	TTF_CloseFont(font);
 }
 
-double CheckInteraction()
+double CheckNPC()
 {
 	double s = 0;
 	double minS = LONG_MAX;

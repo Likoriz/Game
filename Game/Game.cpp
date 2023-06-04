@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "NPCAnimation.h"
 #include "Basic.h"
+#include "LocationEntrance.h"
 #include "Dialogue.h"
 
 SDL_Window* win = NULL;
@@ -114,7 +115,7 @@ int main(int argc, char* argv[])
 						character.speed = 225;
 						break;//character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
 					case SDL_SCANCODE_E:
-						minS = CheckInteraction();
+						minS = CheckNPC();
 						if (minS <= MINSFROMNPC && !character.isMoving)
 						{
 							state.isGaming = false;
@@ -248,6 +249,13 @@ int main(int argc, char* argv[])
 
 		if (state.isGaming)
 		{
+			minS = CheckEntrance();
+			if (minS <= MINSFROMENTRANCE)
+			{
+				Enter();
+				DeleteMap();
+				LoadMap();
+			}
 			Motion();
 		}
 
