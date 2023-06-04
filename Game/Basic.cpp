@@ -120,10 +120,3 @@ void PlaySound(const char filename[], int channel)
 	if (Mix_PlayChannel(channel, audio.sound, 0) < 0)
 		printf("%s\n", Mix_GetError());
 }
-
-//void UpdateText(SDL_Texture* texture, char stringText[], TTF_Font* font, SDL_Rect textRect, SDL_FRect textDstRect, SDL_Color colour)
-//{
-//	SDL_DestroyTexture(texture);
-//	texture = GenerateTextureText(stringText, font, &textRect, colour);
-//	SDL_RenderCopyF(ren, texture, &textRect, &textDstRect);
-//}

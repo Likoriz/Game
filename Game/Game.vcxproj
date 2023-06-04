@@ -144,6 +144,7 @@
     <ClCompile Include="Basic.cpp" />
     <ClCompile Include="Dialogue.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="LocationEntrance.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Motion.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Basic.h" />
     <ClInclude Include="Dialogue.h" />
+    <ClInclude Include="LocationEntrance.h" />
     <ClInclude Include="NPCAnimation.h" />
     <ClInclude Include="stats.h" />
     <ClInclude Include="Map.h" />

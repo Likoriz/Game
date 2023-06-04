@@ -60,6 +60,7 @@ void StartMenu()
 					if (StartGame.soundCount < 1 && !Mix_Playing(0))
 					{
 						StartGame.soundCount++;
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 0);
 					}
 				}
@@ -75,6 +76,7 @@ void StartMenu()
 					if (ContinueGame.soundCount < 1 && !Mix_Playing(1))
 					{
 						ContinueGame.soundCount++;
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 1);
 					}
 				}
@@ -90,6 +92,7 @@ void StartMenu()
 					if (Credits.soundCount < 1 && !Mix_Playing(2))
 					{
 						Credits.soundCount++;
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 2);
 					}
 				}
@@ -105,6 +108,7 @@ void StartMenu()
 					if (Exit.soundCount < 1 && !Mix_Playing(3))
 					{
 						Exit.soundCount++;
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 3);
 					}
 				}
@@ -249,8 +253,9 @@ void Credit()
 					Back.colour = { 180, 180, 180, 255 };
 					if (Back.soundCount < 1 && !Mix_Playing(0))
 					{
-						PlaySound("Music\\Button.wav", 0);
 						Back.soundCount++;
+						Mix_FreeChunk(audio.sound);
+						PlaySound("Music\\Button.wav", 0);
 					}
 				}
 				else
@@ -363,8 +368,9 @@ void HeroChoice()
 					ChooseEnchantress.colour = { 180, 180, 180, 255 };
 					if (ChooseEnchantress.soundCount < 1 && !Mix_Playing(0))
 					{
-						PlaySound("Music\\Button.wav", 0);
 						ChooseEnchantress.soundCount++;
+						Mix_FreeChunk(audio.sound);
+						PlaySound("Music\\Button.wav", 0);
 					}
 				}
 				else
@@ -378,12 +384,16 @@ void HeroChoice()
 					ChooseKnight.colour = { 180, 180, 180, 255 };
 					if (ChooseKnight.soundCount < 1 && !Mix_Playing(1))
 					{
+						ChooseKnight.soundCount++;
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 1);
-						ChooseKnight.soundCount = 0;
 					}
 				}
 				else
+				{
 					ChooseKnight.colour = { 0, 0, 0, 255 };
+					ChooseKnight.soundCount = 0;
+				}
 			case SDL_MOUSEBUTTONDOWN:
 				SDL_GetMouseState(&mouseX, &mouseY);
 				switch (event.button.button)
@@ -518,6 +528,7 @@ void ResumeMenu()
 					ResumeGame.colour = { 180, 180, 180, 255 };
 					if (ResumeGame.soundCount < 1 && !Mix_Playing(0))
 					{
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 0);
 						ResumeGame.soundCount++;
 					}
@@ -533,6 +544,7 @@ void ResumeMenu()
 					ReturnToMainMenu.colour = { 180, 180, 180, 255 };
 					if (ReturnToMainMenu.soundCount < 1 && !Mix_Playing(1))
 					{
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 1);
 						ReturnToMainMenu.soundCount++;
 					}
@@ -548,6 +560,7 @@ void ResumeMenu()
 					Exit.colour = { 180, 180, 180, 255 };
 					if (Exit.soundCount < 1 && !Mix_Playing(2))
 					{
+						Mix_FreeChunk(audio.sound);
 						PlaySound("Music\\Button.wav", 2);
 						Exit.soundCount++;
 					}

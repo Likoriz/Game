@@ -2,12 +2,14 @@
 #include "Motion.h"
 #include "NPCAnimation.h"
 #include "Menu.h"
+#include "LocationEntrance.h"
 #include "Basic.h"
 
 Map map;
 TileSet tile;
 MapHitbox hitbox;
 NPC npc;
+Entrance entrance;
 
 void Save()
 {
@@ -58,6 +60,11 @@ void LoadMap()
 		strcpy_s(tile.texturePath, "Maps\\Map1\\map.png");
 		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map1\\maphitbox.txt");
 		break;
+	case 2:
+		strcpy_s(map.fileMapPath, "Maps\\Map2\\map.txt");
+		strcpy_s(tile.texturePath, "Maps\\Map2\\map.png");
+		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map2\\maphitbox.txt");
+		break;
 	}
 
 	if (fopen_s(&map.file, map.fileMapPath, "rt") == 0)
@@ -85,6 +92,7 @@ void LoadMap()
 		fscanf_s(hitbox.file, "%d%d", &hitbox.width, &hitbox.height);
 	    fscanf_s(hitbox.file, "%d", &hitbox.count);
 		fscanf_s(hitbox.file, "%d", &npc.count);
+		fscanf_s(hitbox.file, "%d", &entrance.count);
 
 		hitbox.hitboxesCode = GetSpaceForHitboxesCode();
 
@@ -101,6 +109,7 @@ void LoadMap()
 
 	hitbox.hitboxes = GetSpaceForHitboxes();
 	npc.rects = GetSpaceForNPC();
+	entrance.rects = GetSpaceForEntrance();
 
 	for (int i = 0; i < npc.count; i++)
 		npc.rects[i].currentFrametime = 0;
@@ -125,21 +134,35 @@ void UpdateMap()
 	else
 		tile.dstTile.y = 0;
 
-	int k = 0;
-	int z = 0;
+	int barrierCount = 0;
+	int npcCount = 0;
+	int entranceCount = 0;
 	for (int i = 0; i < map.heightR; i++)
 	{
 		for (int j = 0; j < map.widthC; j++)
 		{
 			tile.tile.x = tile.width * (map.terrain[i][j] % tile.countC);
-			if (map.terrain[i][j] / 10 == 0)
-				tile.tile.y = 0;
-			else
-				if (map.terrain[i][j] / 10 == 1)
-					tile.tile.y = tile.height;
-				else
-					if (map.terrain[i][j] / 10 == 2)
-						tile.tile.y = tile.height * 2;
+			//switch (map.terrain[i][j] / 10)
+			//{
+			//case 0:
+			//	tile.tile.y = 0;
+			//	break;
+			//case 1:
+			//	tile.tile.y = tile.height;
+			//	break;
+			//case 2:
+			//	tile.tile.y = tile.height * 2;
+			//	break;
+			//}
+			tile.tile.y = tile.height * (map.terrain[i][j] / 10);
+			//if (map.terrain[i][j] / 10 == 0)
+			//	tile.tile.y = 0;
+			//else
+			//	if (map.terrain[i][j] / 10 == 1)
+			//		tile.tile.y = tile.height;
+			//	else
+			//		if (map.terrain[i][j] / 10 == 2)
+			//			tile.tile.y = tile.height * 2;
 			tile.dstTile.w = tile.width * MAPSCALE;
 			tile.dstTile.h = tile.height * MAPSCALE;
 
@@ -153,41 +176,110 @@ void UpdateMap()
 			else
 				tile.dstTile.x = tile.dstTile.w * j;
 
-			if (hitbox.hitboxesCode[i][j] == 1)
-			{
-				hitbox.hitboxes[k].x = tile.dstTile.x;
-				hitbox.hitboxes[k].y = tile.dstTile.y;
-				hitbox.hitboxes[k].w = tile.dstTile.w;
-				hitbox.hitboxes[k].h = tile.dstTile.h;
-				k++;
-			}
-			if (hitbox.hitboxesCode[i][j] > 1 && hitbox.hitboxesCode[i][j] < 13)
-			{
-				hitbox.hitboxes[k].x = tile.dstTile.x;
-				hitbox.hitboxes[k].y = tile.dstTile.y;
-				hitbox.hitboxes[k].w = tile.dstTile.w;
-				hitbox.hitboxes[k].h = tile.dstTile.h;
+			hitbox.hitboxes[barrierCount].x = tile.dstTile.x;
+			hitbox.hitboxes[barrierCount].y = tile.dstTile.y;
+			hitbox.hitboxes[barrierCount].w = tile.dstTile.w;
+			hitbox.hitboxes[barrierCount].h = tile.dstTile.h;
 
-				npc.rects[z].dstRect.x = hitbox.hitboxes[k].x;
-				npc.rects[z].dstRect.y = hitbox.hitboxes[k].y;
-				npc.rects[z].dstRect.w = hitbox.hitboxes[k].w;
-				npc.rects[z].dstRect.h = hitbox.hitboxes[k].h;
+			if (hitbox.hitboxesCode[i][j] < 0 && hitbox.hitboxesCode[i][j] > -6)
+			{
+				entrance.rects[entranceCount].dstRect.x = hitbox.hitboxes[barrierCount].x;
+				entrance.rects[entranceCount].dstRect.y = hitbox.hitboxes[barrierCount].y;
+				entrance.rects[entranceCount].dstRect.w = hitbox.hitboxes[barrierCount].w;
+				entrance.rects[entranceCount].dstRect.h = hitbox.hitboxes[barrierCount].h;
 
 				switch (hitbox.hitboxesCode[i][j])
 				{
-				case 8:
-					npc.rects[z].type = 8;
-					npc.rects[z].frameCount = 5;
-					npc.rects[z].rect.y = npc.rects[z].rect.h * 6;
-					break;
-				case 12:
-					npc.rects[z].type = 12;
-					npc.rects[z].frameCount = 5;
-					npc.rects[z].rect.y = npc.rects[z].rect.h * 10;
+				case -2:
+					entrance.rects[entranceCount].type = -2;
 					break;
 				}
-				k++;
-				z++;
+				barrierCount++;
+				entranceCount++;
+			}
+
+			if (hitbox.hitboxesCode[i][j] == 1)
+			{
+				barrierCount++;
+			}
+
+			if (hitbox.hitboxesCode[i][j] > 1 && hitbox.hitboxesCode[i][j] < 14)
+			{
+				npc.rects[npcCount].dstRect.x = hitbox.hitboxes[barrierCount].x;
+				npc.rects[npcCount].dstRect.y = hitbox.hitboxes[barrierCount].y;
+				npc.rects[npcCount].dstRect.w = hitbox.hitboxes[barrierCount].w;
+				npc.rects[npcCount].dstRect.h = hitbox.hitboxes[barrierCount].h;
+
+				switch (hitbox.hitboxesCode[i][j])
+				{
+				case 2:
+					npc.rects[npcCount].type = 2;
+					npc.rects[npcCount].frameCount = 4;
+					npc.rects[npcCount].rect.y = 0;
+					break;
+				case 3:
+					npc.rects[npcCount].type = 3;
+					npc.rects[npcCount].frameCount = 4;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h;
+					break;
+				case 4:
+					npc.rects[npcCount].type = 4;
+					npc.rects[npcCount].frameCount = 4;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 2;
+					break;
+				case 5:
+					npc.rects[npcCount].type = 5;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 3;
+					break;
+				case 6:
+					npc.rects[npcCount].type = 6;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 4;
+					break;
+				case 7:
+					npc.rects[npcCount].type = 7;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 5;
+					break;
+				case 8:
+					npc.rects[npcCount].type = 8;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 6;
+					break;
+				case 9:
+					npc.rects[npcCount].type = 9;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 7;
+					break;
+				case 10:
+					npc.rects[npcCount].type = 10;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 8;
+					break;
+				case 11:
+					npc.rects[npcCount].type = 11;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 9;
+					break;
+				case 12:
+					npc.rects[npcCount].type = 12;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 10;
+					break;
+				case 13:
+					npc.rects[npcCount].type = 13;
+					npc.rects[npcCount].frameCount = 5;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 11;
+					break;
+				case 14:
+					npc.rects[npcCount].type = 14;
+					npc.rects[npcCount].frameCount = 2;
+					npc.rects[npcCount].rect.y = npc.rects[npcCount].rect.h * 12;
+					break;
+				}
+				barrierCount++;
+				npcCount++;
 			}
 
 			SDL_RenderCopyF(ren, tile.texture, &tile.tile, &tile.dstTile);
@@ -203,6 +295,7 @@ void DeleteMap()
 	FreeSpaceForHitboxesCode();
 	FreeSpaceForHitboxes();
 	FreeSpaceForNPC();
+	FreeSpaceForEntrance();
 }
 
 int** GetSpaceForMap()

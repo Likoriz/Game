@@ -35,4 +35,4 @@ struct DialogueBox
 extern DialogueBox dialogueBox;
 
 void Dialogue();
-double CheckNPC();
+double CheckInteraction();

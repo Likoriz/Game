@@ -3,12 +3,6 @@
 
 enum Direction { RIGHT = 1, LEFT = 2 };
 
-//enum StateAnimation { IDLE = 0, MOVING = 1, ATTACK = 2, ULT = 3 };
-
-enum AnimationState { USUAL, ATTACK };
-enum UsualState { IDLE, MOVE };
-enum AttackState { BASIC, ULT };
-
 struct Character
 {
 	SDL_Rect playerRect;
@@ -25,27 +19,17 @@ struct Character
 
 	int direction = RIGHT;
 	bool boostSpeed = false;
-	//bool isAttack = false;
+
 	int countAttack = 0;
-	//bool isUlt = false;
-	//bool isIdle = true;
 
-	/*int animation = 0;
-	int animationOld = 0;
-	int animationNew = 0;*/
-
-	AnimationState animationState;
-	AttackState attackState;
-	UsualState usualState;
-	bool attackClickThisFrame = false;
-	bool animationRestarted = false;
+	int animation = 0;
 
 	bool isEnchantress = false;
 	bool isKnight = false;
 }; 
 extern Character character;
 
-
+enum StateAnimation { IDLE = 0, MOVING = 1, ATTACK = 2, ULT = 3 };
 
 struct GameState
 {

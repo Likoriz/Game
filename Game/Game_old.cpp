@@ -67,8 +67,6 @@ int main(int argc, char* argv[])
 
 	while (menu.isRunning)
 	{
-		character.attackClickThisFrame = false;
-
 		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -93,28 +91,28 @@ int main(int argc, char* argv[])
 					switch (event.key.keysym.scancode)
 					{
 					case SDL_SCANCODE_W:
-						//character.animation = MOVING; 
 						character.isUp = true;
-						break;//character.isUp = true;	character.isIdle = false;									break;
+						character.isIdle = false;
+						break;
 					case SDL_SCANCODE_S:
-						//character.animation = MOVING; 
 						character.isDown = true;
-						break;//character.isDown = true; character.isIdle = false;									break;
+						character.isIdle = false;
+						break;
 					case SDL_SCANCODE_D:
-						//character.animation = MOVING; 
 						character.isRight = true;
-						break;//character.isRight = true; character.isIdle = false;								break;
+						character.isIdle = false;
+						break;
 					case SDL_SCANCODE_A:
-						//character.animation = MOVING; 
 						character.isLeft = true;
-						break;//character.isLeft = true; character.isIdle = false;									break;
+						character.isIdle = false;
+						break;
 					case SDL_SCANCODE_LSHIFT:
-						//character.animation = MOVING; 
 						character.boostSpeed = true;
+						character.isIdle = false;
 						character.speed = 225;
-						break;//character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
+						break;
 					case SDL_SCANCODE_E:
-						minS = CheckInteraction();
+						minS = CheckNPC();
 						if (minS <= MINSFROMNPC && !character.isMoving)
 						{
 							state.isGaming = false;
@@ -145,6 +143,7 @@ int main(int argc, char* argv[])
 									character.playerTexture = NULL;
 									character.playerTexture = LoadTexture("Character\\KnightAnimation.png", &character.playerRect);
 								}
+
 							character.playerRect.w = 128;
 							character.playerRect.h = 128;
 							character.x = 150;
@@ -170,20 +169,25 @@ int main(int argc, char* argv[])
 				{
 				case SDL_SCANCODE_W:
 					character.isUp = false;
-					break;//character.isUp = false; character.isIdle = true;									break;
+					character.isIdle = true;
+					break;
 				case SDL_SCANCODE_S:
 					character.isDown = false;
-					break;//character.isDown = false; character.isIdle = true;									break;
+					character.isIdle = true;
+					break;
 				case SDL_SCANCODE_D:
 					character.isRight = false;
-					break;//character.isRight = false;	character.isIdle = true;								break;
+					character.isIdle = true;
+					break;
 				case SDL_SCANCODE_A:
 					character.isLeft = false;
-					break;//character.isLeft = false; character.isIdle = true;									break;
+					character.isIdle = true;
+					break;
 				case SDL_SCANCODE_LSHIFT:
 					character.speed = 150;
 					character.boostSpeed = false;
-					break;// character.isIdle = true; break;
+					character.isIdle = true;
+					break;
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
@@ -193,42 +197,22 @@ int main(int argc, char* argv[])
 					{
 					case SDL_BUTTON_LEFT:
 						if (!Mix_Playing(1))
-						{
-							Mix_FreeChunk(audio.sound);
 							PlaySound("Music\\FastSwing.wav", 1);
-						}
-						//character.isAttack = true;
-						//character.animation = ATTACK;
-						//character.animationNew = ATTACK;
 
-						character.animationState = ATTACK;
-						character.attackState = BASIC;
-						character.attackClickThisFrame = true;
-
+						character.animation = ATTACK;
 						character.countAttack++;
+
 						if (character.countAttack == 2)
 							character.countAttack = 0;
 						break;
 					case SDL_BUTTON_RIGHT:
 						if (character.isEnchantress && !Mix_Playing(1))
-						{
-							Mix_FreeChunk(audio.sound);
 							PlaySound("Music\\Spell.wav", 1);
-						}
 						else
 							if (!Mix_Playing(1))
-							{
-								Mix_FreeChunk(audio.sound);
 								PlaySound("Music\\SeveralSwings.wav", 1);
-							}
-						
-						character.animationState = ATTACK;
-						character.attackState = ULT;
-						character.attackClickThisFrame = true;
-						
-						//character.animation = ULT;
-						//character.animationNew = ULT;
-						//character.isUlt = true;
+
+						character.animation = ULT;
 						break;
 					}
 				}
@@ -247,22 +231,18 @@ int main(int argc, char* argv[])
 		NPCAnimation();
 
 		if (state.isGaming)
-		{
 			Motion();
-		}
 
-		if (character.isMoving && !Mix_Playing(0) && !Mix_Playing(1))
-		{
-			Mix_FreeChunk(audio.sound);
+		if (character.isMoving && !Mix_Playing(0) && !character.boostSpeed)
 			PlaySound("Music\\Step.wav", 0);
-		}
+		else
+			if (character.isMoving && !Mix_Playing(0) && character.boostSpeed)
+				PlaySound("Music\\Run.wav", 0);
 
 		Animation();
 
 		if (state.isDialouge)
 			Dialogue();
-
-		//character.animationOld = character.animationNew;
 
 		SDL_RenderPresent(ren);
 	}
