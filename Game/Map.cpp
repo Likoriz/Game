@@ -10,6 +10,7 @@ TileSet tile;
 MapHitbox hitbox;
 NPC npc;
 Entrance entrance;
+Environment environment;
 
 void Save()
 {
@@ -19,6 +20,14 @@ void Save()
 		fprintf(file, "%d\n", map.level);
 		fprintf(file, "%f %f\n", character.x, character.y);
 		fprintf(file, "%d %d\n", character.isEnchantress, character.isKnight);
+
+		fprintf(file, "%d\n", character.quest);
+
+		fprintf(file, "%d\n", quest.bread);
+		fprintf(file, "%d\n", quest.monsters);
+		fprintf(file, "%d\n", quest.sewers);
+		fprintf(file, "%d\n", quest.boss);
+		fprintf(file, "%d\n", quest.end);
 
 		fclose(file);
 	}
@@ -42,6 +51,18 @@ void LoadSave()
 		character.isEnchantress = enchantress;
 		character.isKnight = knight;
 
+		int questy = 0;
+		fscanf_s(file, "%d", &questy);
+		character.quest = questy;
+
+		int bread = 0, monsters = 0, sewers = 0, boss = 0, ending = 0;
+		fscanf_s(file, "%d%d%d%d%d", &bread, &monsters, &sewers, &boss, &ending);
+		quest.bread = bread;
+		quest.monsters = monsters;
+		quest.sewers = sewers;
+		quest.boss = boss;
+		quest.end = ending;
+
 		fclose(file);
 	}
 	else
@@ -59,11 +80,46 @@ void LoadMap()
 		strcpy_s(map.fileMapPath, "Maps\\Map1\\map.txt");
 		strcpy_s(tile.texturePath, "Maps\\Map1\\map.png");
 		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map1\\maphitbox.txt");
+		//environment.isDark = false;
+		//environment.isMisty = false;
+		//character.isBlownAway = false;
 		break;
 	case 2:
 		strcpy_s(map.fileMapPath, "Maps\\Map2\\map.txt");
 		strcpy_s(tile.texturePath, "Maps\\Map2\\map.png");
 		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map2\\maphitbox.txt");
+		environment.isDark = false;
+		environment.isMisty = false;
+		//character.isBlownAway = false;
+		break;
+	case 3:
+		strcpy_s(map.fileMapPath, "Maps\\Map3\\map.txt");
+		strcpy_s(tile.texturePath, "Maps\\Map3\\map.png");
+		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map3\\maphitbox.txt");
+		environment.isDark = true;
+		//environment.isMisty = false;
+		//character.isBlownAway = false;
+		break;
+	case 4:
+		strcpy_s(map.fileMapPath, "Maps\\Map4\\map.txt");
+		strcpy_s(tile.texturePath, "Maps\\Map4\\map.png");
+		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map4\\maphitbox.txt");
+
+		environment.isMisty = true;
+		character.isBlownAway = false;
+		break;
+	case 5:
+		strcpy_s(map.fileMapPath, "Maps\\Map5\\map.txt");
+		strcpy_s(tile.texturePath, "Maps\\Map5\\map.png");
+		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map5\\maphitbox.txt");
+		environment.isMisty = false;
+		character.isBlownAway = true;
+		break;
+	case 6:
+		strcpy_s(map.fileMapPath, "Maps\\Map6\\map.txt");
+		strcpy_s(tile.texturePath, "Maps\\Map6\\map.png");
+		strcpy_s(hitbox.fileHitboxPath, "Maps\\Map6\\maphitbox.txt");
+		character.isBlownAway = false;
 		break;
 	}
 
@@ -142,27 +198,7 @@ void UpdateMap()
 		for (int j = 0; j < map.widthC; j++)
 		{
 			tile.tile.x = tile.width * (map.terrain[i][j] % tile.countC);
-			//switch (map.terrain[i][j] / 10)
-			//{
-			//case 0:
-			//	tile.tile.y = 0;
-			//	break;
-			//case 1:
-			//	tile.tile.y = tile.height;
-			//	break;
-			//case 2:
-			//	tile.tile.y = tile.height * 2;
-			//	break;
-			//}
 			tile.tile.y = tile.height * (map.terrain[i][j] / 10);
-			//if (map.terrain[i][j] / 10 == 0)
-			//	tile.tile.y = 0;
-			//else
-			//	if (map.terrain[i][j] / 10 == 1)
-			//		tile.tile.y = tile.height;
-			//	else
-			//		if (map.terrain[i][j] / 10 == 2)
-			//			tile.tile.y = tile.height * 2;
 			tile.dstTile.w = tile.width * MAPSCALE;
 			tile.dstTile.h = tile.height * MAPSCALE;
 
@@ -181,7 +217,7 @@ void UpdateMap()
 			hitbox.hitboxes[barrierCount].w = tile.dstTile.w;
 			hitbox.hitboxes[barrierCount].h = tile.dstTile.h;
 
-			if (hitbox.hitboxesCode[i][j] < 0 && hitbox.hitboxesCode[i][j] > -6)
+			if (hitbox.hitboxesCode[i][j] < 0 && hitbox.hitboxesCode[i][j] > -7)
 			{
 				entrance.rects[entranceCount].dstRect.x = hitbox.hitboxes[barrierCount].x;
 				entrance.rects[entranceCount].dstRect.y = hitbox.hitboxes[barrierCount].y;
@@ -196,6 +232,18 @@ void UpdateMap()
 				case -2:
 					entrance.rects[entranceCount].type = 2;
 					break;
+				case -3:
+					entrance.rects[entranceCount].type = 3;
+					break;
+				case -4:
+					entrance.rects[entranceCount].type = 4;
+					break;
+				case -5:
+					entrance.rects[entranceCount].type = 5;
+					break;
+				case -6:
+					entrance.rects[entranceCount].type = 6;
+					break;
 				}
 				barrierCount++;
 				entranceCount++;
@@ -206,7 +254,7 @@ void UpdateMap()
 				barrierCount++;
 			}
 
-			if (hitbox.hitboxesCode[i][j] > 1 && hitbox.hitboxesCode[i][j] < 14)
+			if (hitbox.hitboxesCode[i][j] > 1 && hitbox.hitboxesCode[i][j] < 15)
 			{
 				npc.rects[npcCount].dstRect.x = hitbox.hitboxes[barrierCount].x;
 				npc.rects[npcCount].dstRect.y = hitbox.hitboxes[barrierCount].y;
@@ -289,7 +337,34 @@ void UpdateMap()
 		}
 		tile.dstTile.y += tile.dstTile.h;
 	}
-	SDL_RenderDrawRects(ren, hitbox.hitboxes, hitbox.count);
+
+	if (environment.isDark)
+	{
+		SDL_DestroyTexture(environment.darkness);
+		environment.darkDst = { character.destinationRect.x - 1250, character.destinationRect.y - 630, 2600, 1439 };
+		environment.darkness = LoadTexture("Assets\\Dark.png", &environment.darkRect);
+		SDL_RenderCopyF(ren, environment.darkness, &environment.darkRect, &environment.darkDst);
+	}
+	else
+		if (environment.darkness)
+			SDL_DestroyTexture(environment.darkness);
+
+	if (environment.enemies_list_DOT_amount_of_enemies_at_the_field == 0 && environment.isMisty)//ÑÞÄÀ ÊÎËÈ×ÅÑÒÂÎ ÂÐÀÃÎÂ ÍÀ ÏÎËÅ
+	{
+		SDL_DestroyTexture(environment.mist);
+		environment.mist = LoadTexture("Assets\\Mist.png", &environment.mistRect);
+		SDL_RenderCopyF(ren, environment.mist, &environment.mistRect, NULL);
+		if (environment.mistTimer > 150)
+		{
+			printf("-5 hp\n");
+			environment.mistTimer = 0;
+		}
+		else
+			environment.mistTimer++;
+	}
+	else
+		if (environment.mist)
+			SDL_DestroyTexture(environment.mist);
 }
 
 void DeleteMap()

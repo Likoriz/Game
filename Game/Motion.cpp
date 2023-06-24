@@ -9,7 +9,11 @@ void Motion()
 	float tmpx = character.x, tmpy = character.y;
 	float tmpdstx = character.destinationRect.x, tmpdsty = character.destinationRect.y;
 
-	bool isCanPass = true;
+	character.isCanPass = true;
+	float windSpeed = 0;
+
+	if (character.isBlownAway)
+		windSpeed = 50;
 
 	if (character.isUp && character.y >= 0)
 		tmpy -= character.speed * timer.dt / 1000;
@@ -28,6 +32,9 @@ void Motion()
 		character.direction = LEFT;
 		tmpx -= character.speed * timer.dt / 1000;
 	}
+
+	if (tmpx + windSpeed * timer.dt / 1000 < (tile.dstTile.w * map.widthC - character.destinationRect.w))
+		tmpx += windSpeed * timer.dt / 1000;
 
 	character.destinationRect = { tmpx, tmpy, (float)character.playerRect.w, (float)character.playerRect.h };
 
@@ -65,10 +72,7 @@ void Motion()
 				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 5)
 				&& character.playerHitbox.y < (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h - 5))
 			{
-				/*system("cls");
-				printf("%d %d %d %d %d\n", i, hitbox.hitboxes[i].x, hitbox.hitboxes[i].y, hitbox.hitboxes[i].x + hitbox.hitboxes[i].w, hitbox.hitboxes[i].y + hitbox.hitboxes[i].h);
-				printf("%f %f %f %f", character.playerHitbox.x, character.playerHitbox.y, character.playerHitbox.x + character.playerHitbox.w, character.playerHitbox.y + character.playerHitbox.h);*/
-				isCanPass = false;
+				character.isCanPass = false;
 				break;
 			}
 		if (character.isUp)
@@ -77,22 +81,27 @@ void Motion()
 				&& character.playerHitbox.y >= hitbox.hitboxes[i].y
 				&& character.playerHitbox.y <= (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h))
 			{
-				/*system("cls");
-				printf("%d %d %d %d %d\n", i, hitbox.hitboxes[i].x, hitbox.hitboxes[i].y, hitbox.hitboxes[i].x + hitbox.hitboxes[i].w, hitbox.hitboxes[i].y + hitbox.hitboxes[i].h);
-				printf("%f %f %f %f", character.playerHitbox.x, character.playerHitbox.y, character.playerHitbox.x + character.playerHitbox.w, character.playerHitbox.y + character.playerHitbox.h);*/
-				isCanPass = false;
+				character.isCanPass = false;
 				break;
 			}
-		if (character.isRight)
-			if ((character.playerHitbox.x + character.playerHitbox.w >= hitbox.hitboxes[i].x
+
+		if (character.isBlownAway && !character.isMoving)
+			if ((character.playerHitbox.x + character.playerHitbox.w >= hitbox.hitboxes[i].x - 1
 				&& character.playerHitbox.x + character.playerHitbox.w <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w)
 				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 5)
 				&& character.playerHitbox.y < (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h - 5)))
 			{
-				/*system("cls");
-				printf("%d %d %d %d %d\n", i, hitbox.hitboxes[i].x, hitbox.hitboxes[i].y, hitbox.hitboxes[i].x + hitbox.hitboxes[i].w, hitbox.hitboxes[i].y + hitbox.hitboxes[i].h);
-				printf("%f %f %f %f", character.playerHitbox.x, character.playerHitbox.y, character.playerHitbox.x + character.playerHitbox.w, character.playerHitbox.y + character.playerHitbox.h);*/
-				isCanPass = false;
+				character.isCanPass = false;
+				break;
+			}
+
+		if (character.isRight)
+			if ((character.playerHitbox.x + character.playerHitbox.w >= hitbox.hitboxes[i].x - 1
+				&& character.playerHitbox.x + character.playerHitbox.w <= (hitbox.hitboxes[i].x + hitbox.hitboxes[i].w)
+				&& (character.playerHitbox.y > hitbox.hitboxes[i].y || character.playerHitbox.y + character.playerHitbox.h > hitbox.hitboxes[i].y + 5)
+				&& character.playerHitbox.y < (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h - 5)))
+			{
+				character.isCanPass = false;
 				break;
 			}
 		if (character.isDown)
@@ -102,16 +111,13 @@ void Motion()
 				&& character.playerHitbox.y + character.playerHitbox.h >= hitbox.hitboxes[i].y
 				&& character.playerHitbox.y + character.playerHitbox.h <= (hitbox.hitboxes[i].y + hitbox.hitboxes[i].h))
 			{
-				/*system("cls");
-				printf("%d %d %d %d %d\n", i, hitbox.hitboxes[i].x, hitbox.hitboxes[i].y, hitbox.hitboxes[i].x + hitbox.hitboxes[i].w, hitbox.hitboxes[i].y + hitbox.hitboxes[i].h);
-				printf("%f %f %f %f", character.playerHitbox.x, character.playerHitbox.y, character.playerHitbox.x + character.playerHitbox.w, character.playerHitbox.y + character.playerHitbox.h);*/
-				isCanPass = false;
+				character.isCanPass = false;
 				break;
 			}
 		}
 	}
 
-	if (isCanPass)
+	if (character.isCanPass)
 	{
 		character.x = tmpx;
 		character.y = tmpy;
@@ -126,9 +132,6 @@ void Motion()
 		character.playerHitbox.w = 40;
 		character.playerHitbox.h = 19;
 	}
-	//printf("%f %f %d %d | ", character.x, character.y, hitbox.hitboxes[110].x + hitbox.hitboxes[110].w, hitbox.hitboxes[110].y + hitbox.hitboxes[110].h);
-	//printf("%f %f | ", character.destinationRect.x, character.destinationRect.y);
-	//system("cls");
 }
 
 void Animation()
@@ -161,28 +164,31 @@ void Animation()
 				character.playerRect.y = character.playerRect.h * 5;
 			character.frameCount = 6;
 		}
-		else if (character.attackState == ULT)
-		{
-			character.playerRect.y = character.playerRect.h * 6;
-			character.frameCount = 10;
-		}
+		else
+			if (character.attackState == ULT)
+			{
+				character.playerRect.y = character.playerRect.h * 6;
+				character.frameCount = 10;
+			}
 	}
-	else if (character.animationState == USUAL)
-	{
-		if (character.usualState == IDLE)
+	else
+		if (character.animationState == USUAL)
 		{
-			character.playerRect.y = 0;
-			character.frameCount = 10;
-		}
-		else if (character.usualState == MOVE)
-		{
-			if (character.boostSpeed)
-				character.playerRect.y = character.playerRect.h * 2;
+			if (character.usualState == IDLE)
+			{
+				character.playerRect.y = 0;
+				character.frameCount = 5;
+			}
 			else
-				character.playerRect.y = character.playerRect.h;
-			character.frameCount = 8;
+				if (character.usualState == MOVE)
+				{
+					if (character.boostSpeed)
+						character.playerRect.y = character.playerRect.h * 2;
+					else
+						character.playerRect.y = character.playerRect.h;
+					character.frameCount = 8;
+				}
 		}
-	}
 
 	character.maxFrametime = 1000 / character.frameCount;
 	character.currentFrametime += timer.dt;
@@ -191,179 +197,19 @@ void Animation()
 	{
 		character.currentFrametime = 0;
 		character.frame = character.frame + 1;
-		if (character.frame == character.frameCount)
+		if (character.frame >= character.frameCount)
 		{
 			character.animationRestarted = true;
 			if (character.animationState == ATTACK)
 				character.frame--;
 			else
 				character.frame = 0;
-
-		}		
+		}
 		character.playerRect.x = character.playerRect.w * character.frame;
 	}
 
-
-	//if (character.isMoving && character.animation != ATTACK && character.animation != ULT)
-	//{
-	//	character.animation = MOVING;
-	//	character.animationNew = MOVING;
-	//}
-	//else
-	//	if (character.animation != ATTACK && character.animation != ULT)
-	//	{
-	//		character.animation = IDLE;
-	//		character.animationNew = IDLE;
-	//	}
-
-	//if (character.animationNew != character.animationOld)
-	//{
-	//	character.currentFrametime = 0;
-	//	character.frame = 0;
-	//}
-
-	//switch (character.animationNew)
-	//{
-	//case IDLE:
-	//	character.playerRect.y = 0;
-	//	character.frameCount = 10;
-	//	character.maxFrametime = 1000 / character.frameCount;
-	//	character.currentFrametime += timer.dt;
-	//	if (character.currentFrametime >= character.maxFrametime)
-	//	{
-	//		character.currentFrametime -= character.maxFrametime;
-	//		character.frame = (character.frame + 1) % character.frameCount;
-	//		character.playerRect.x = character.playerRect.w * character.frame;
-	//	}
-	//	break;
-	//case MOVING:
-	//	if (character.boostSpeed)
-	//		character.playerRect.y = character.playerRect.h * 2;
-	//	else
-	//		character.playerRect.y = character.playerRect.h;
-	//	character.frameCount = 8;
-	//	character.maxFrametime = 1000 / character.frameCount;
-	//	character.currentFrametime += timer.dt;
-	//	if (character.currentFrametime >= character.maxFrametime)
-	//	{
-	//		character.currentFrametime -= character.maxFrametime;
-	//		character.frame = (character.frame + 1) % character.frameCount;
-	//		character.playerRect.x = character.playerRect.w * character.frame;
-	//	}
-	//	break;
-	//case ATTACK:
-	//	if (character.countAttack == 1)
-	//		character.playerRect.y = character.playerRect.h * 4;
-	//	else
-	//		character.playerRect.y = character.playerRect.h * 5;
-	//	character.frameCount = 6;
-	//	character.maxFrametime = 1000 / character.frameCount;
-	//	character.currentFrametime += timer.dt;
-	//	if (character.currentFrametime >= character.maxFrametime)
-	//	{
-	//		character.currentFrametime -= character.maxFrametime;
-	//		character.frame = character.frame + 1;
-	//		character.playerRect.x = character.playerRect.w * character.frame;
-	//	}
-	//	else
-	//		if (character.frame == character.frameCount)
-	//		{
-	//			//character.isAttack = false;
-	//			character.animationNew = IDLE;
-	//			character.currentFrametime = 0;
-	//			character.frame = 0;
-	//		}
-	//	break;
-	//case ULT:
-	//	character.playerRect.y = character.playerRect.h * 6;
-	//	character.frameCount = 10;
-	//	character.maxFrametime = 1000 / character.frameCount;
-	//	character.currentFrametime += timer.dt;
-	//	if (character.currentFrametime >= character.maxFrametime)
-	//	{
-	//		character.currentFrametime -= character.maxFrametime;
-	//		character.frame = character.frame + 1;
-	//		character.playerRect.x = character.playerRect.w * character.frame;
-	//	}
-	//	else
-	//		if (character.frame == character.frameCount)
-	//		{
-	//			//character.isUlt = false;
-	//			character.animationNew = IDLE;
-	//			character.currentFrametime = 0;
-	//			character.frame = 0;
-	//		}
-	//}
-	/*if (character.isMoving)
-	{
-		if (character.boostSpeed)
-			character.playerRect.y = character.playerRect.h * 2;
-		else
-			character.playerRect.y = character.playerRect.h;
-		character.frameCount = 8;
-		character.maxFrametime = 1000 / character.frameCount;
-		character.currentFrametime += timer.dt;
-		if (character.currentFrametime >= character.maxFrametime)
-		{
-			character.currentFrametime -= character.maxFrametime;
-			character.frame = (character.frame + 1) % character.frameCount;
-			character.playerRect.x = character.playerRect.w * character.frame;
-		}
-	}
-	else
-		if (character.isIdle)
-		{
-			character.playerRect.y = 0;
-			character.frameCount = 10;
-			character.maxFrametime = 1000 / character.frameCount;
-			character.currentFrametime += timer.dt;
-			if (character.currentFrametime >= character.maxFrametime)
-			{
-				character.currentFrametime -= character.maxFrametime;
-				character.frame = (character.frame + 1) % character.frameCount;
-				character.playerRect.x = character.playerRect.w * character.frame;
-			}
-		}
-
-	if (character.isAttack)
-	{
-		if (character.countAttack == 1)
-			character.playerRect.y = character.playerRect.h * 4;
-		else
-			character.playerRect.y = character.playerRect.h * 5;
-		character.frameCount = 6;
-		character.maxFrametime = 1000 / character.frameCount;
-		character.currentFrametime += timer.dt;
-		if (character.currentFrametime >= character.maxFrametime)
-		{
-			character.currentFrametime -= character.maxFrametime;
-			character.frame = character.frame + 1;
-			character.playerRect.x = character.playerRect.w * character.frame;
-		}
-			if (character.frame == character.frameCount)
-				character.isAttack = false;
-	}
-
-	if (character.isUlt)
-	{
-		character.playerRect.y = character.playerRect.h * 6;
-		character.frameCount = 8;
-		character.maxFrametime = 1000 / character.frameCount;
-		character.currentFrametime += timer.dt;
-		if (character.currentFrametime >= character.maxFrametime)
-		{
-			character.currentFrametime -= character.maxFrametime;
-			character.frame = (character.frame + 1) % character.frameCount;
-			character.playerRect.x = character.playerRect.w * character.frame;
-		}
-		else
-			if (character.frame == character.frameCount)
-				character.isUlt = false;
-	}*/
 	if (character.direction == LEFT)
 		SDL_RenderCopyExF(ren, character.playerTexture, &character.playerRect, &character.destinationRect, NULL, NULL, SDL_FLIP_HORIZONTAL);
 	else
 		SDL_RenderCopyF(ren, character.playerTexture, &character.playerRect, &character.destinationRect);
-	//SDL_RenderDrawRectF(ren, &character.destinationRect);
-	SDL_RenderDrawRectF(ren, &character.playerHitbox);
 }

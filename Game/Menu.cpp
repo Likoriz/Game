@@ -131,7 +131,6 @@ void StartMenu()
 					if (mouseX >= ContinueGame.dstRect.x * scaleX && mouseX <= (ContinueGame.dstRect.x + ContinueGame.dstRect.w) * scaleX && mouseY >= ContinueGame.dstRect.y * scaleY && mouseY <= (ContinueGame.dstRect.y + ContinueGame.dstRect.h) * scaleY)
 					{
 						menu.isStart = false;
-						//menu.isHeroChoice = true;
 						menu.isRunning = true;
 						menu.isLoad = true;
 					}
@@ -162,8 +161,6 @@ void StartMenu()
 			}
 		}
 		SDL_RenderCopy(ren, menu.backgroundTexture, &menu.backgroundRect, NULL);
-
-		//UpdateText(StartGame.text, StartGame.stringText, font, StartGame.textRect, StartGame.dstRect, StartGame.colour);
 
 		SDL_DestroyTexture(StartGame.text);
 		StartGame.text = GenerateTextureText(StartGame.stringText, font, &StartGame.textRect, StartGame.colour);

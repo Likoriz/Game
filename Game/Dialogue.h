@@ -26,11 +26,15 @@ struct DialogueBox
 	SDL_Rect textRect3;
 	SDL_Rect dstRect3 = { 400, 555, 500, 30 };
 	SDL_Texture* text3 = NULL;
+	SDL_Color colour3 = { 0, 0, 0, 255 };
 
 	char stringText4[50] = "";
 	SDL_Rect textRect4;
 	SDL_Rect dstRect4 = { 400, 595, 500, 30 };
 	SDL_Texture* text4 = NULL;
+	SDL_Color colour4 = { 0, 0, 0, 255 };
+
+	bool allowChoice = false;
 };
 extern DialogueBox dialogueBox;
 

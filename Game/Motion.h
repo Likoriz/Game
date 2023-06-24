@@ -3,11 +3,36 @@
 
 enum Direction { RIGHT = 1, LEFT = 2 };
 
-//enum StateAnimation { IDLE = 0, MOVING = 1, ATTACK = 2, ULT = 3 };
+enum questState { BREAD = 0, MONSTERS = 1, SEWERS = 2, BOSS = 3, END = 4 };
 
 enum AnimationState { USUAL, ATTACK };
 enum UsualState { IDLE, MOVE };
 enum AttackState { BASIC, ULT };
+
+struct Quests
+{
+	bool bread = false;
+	bool monsters = false;
+	bool sewers = false;
+	bool boss = false;
+	bool end = false;
+};
+extern Quests quest;
+
+struct Environment
+{
+	SDL_Texture* darkness = NULL;
+	SDL_Rect darkRect = {};
+	SDL_FRect darkDst = {};
+	bool isDark = false;
+
+	SDL_Texture* mist = NULL;
+	SDL_Rect mistRect = {};
+	int enemies_list_DOT_amount_of_enemies_at_the_field = 0;
+	int mistTimer = 0;
+	bool isMisty = false;
+};
+extern Environment environment;
 
 struct Character
 {
@@ -20,19 +45,15 @@ struct Character
 
 	int frame = 0, frameCount = 0, currentFrametime = 0, maxFrametime = 0;
 	bool isMoving = false;
+	bool isCanPass = true;
+	bool isBlownAway = false;
 
 	bool isUp = false, isDown = false, isRight = false, isLeft = false;
 
 	int direction = RIGHT;
 	bool boostSpeed = false;
-	//bool isAttack = false;
-	int countAttack = 0;
-	//bool isUlt = false;
-	//bool isIdle = true;
 
-	/*int animation = 0;
-	int animationOld = 0;
-	int animationNew = 0;*/
+	int countAttack = 0;
 
 	AnimationState animationState;
 	AttackState attackState;
@@ -42,10 +63,10 @@ struct Character
 
 	bool isEnchantress = false;
 	bool isKnight = false;
+
+	int quest = BREAD;
 }; 
 extern Character character;
-
-
 
 struct GameState
 {

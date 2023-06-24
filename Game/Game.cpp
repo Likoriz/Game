@@ -94,26 +94,22 @@ int main(int argc, char* argv[])
 					switch (event.key.keysym.scancode)
 					{
 					case SDL_SCANCODE_W:
-						//character.animation = MOVING; 
 						character.isUp = true;
-						break;//character.isUp = true;	character.isIdle = false;									break;
+						break;
 					case SDL_SCANCODE_S:
-						//character.animation = MOVING; 
 						character.isDown = true;
-						break;//character.isDown = true; character.isIdle = false;									break;
+						break;
 					case SDL_SCANCODE_D:
-						//character.animation = MOVING; 
 						character.isRight = true;
-						break;//character.isRight = true; character.isIdle = false;								break;
+						break;
 					case SDL_SCANCODE_A:
-						//character.animation = MOVING; 
 						character.isLeft = true;
-						break;//character.isLeft = true; character.isIdle = false;									break;
+						break;
 					case SDL_SCANCODE_LSHIFT:
 						//character.animation = MOVING; 
 						character.boostSpeed = true;
 						character.speed = 225;
-						break;//character.boostSpeed = true; character.speed = 225; character.isIdle = false;	break;
+						break;
 					case SDL_SCANCODE_E:
 						minS = CheckNPC();
 						if (minS <= MINSFROMNPC && !character.isMoving)
@@ -128,10 +124,20 @@ int main(int argc, char* argv[])
 						if (menu.isReturn)
 						{
 							menu.isReturn = false;
+
 							Mix_FreeMusic(audio.music);
 							StartMenu();
+
 							if (menu.isHeroChoice)
 								HeroChoice();
+
+							if (menu.isLoad)
+							{
+								LoadSave();
+								menu.isLoad = false;
+								DeleteMap();
+								LoadMap();
+							}
 
 							if (character.isEnchantress)
 							{
@@ -148,8 +154,6 @@ int main(int argc, char* argv[])
 								}
 							character.playerRect.w = 128;
 							character.playerRect.h = 128;
-							character.x = 150;
-							character.y = 2000;
 
 							PlayMusic("Music\\Usual.wav");
 						}
@@ -161,7 +165,8 @@ int main(int argc, char* argv[])
 					switch (event.key.keysym.scancode)
 					{
 					case SDL_SCANCODE_SPACE:
-						dialogueBox.progress++;
+						if (!dialogueBox.allowChoice)
+							dialogueBox.progress++;
 						break;
 					}
 				}
@@ -171,20 +176,20 @@ int main(int argc, char* argv[])
 				{
 				case SDL_SCANCODE_W:
 					character.isUp = false;
-					break;//character.isUp = false; character.isIdle = true;									break;
+					break;
 				case SDL_SCANCODE_S:
 					character.isDown = false;
-					break;//character.isDown = false; character.isIdle = true;									break;
+					break;
 				case SDL_SCANCODE_D:
 					character.isRight = false;
-					break;//character.isRight = false;	character.isIdle = true;								break;
+					break;
 				case SDL_SCANCODE_A:
 					character.isLeft = false;
-					break;//character.isLeft = false; character.isIdle = true;									break;
+					break;
 				case SDL_SCANCODE_LSHIFT:
 					character.speed = 150;
 					character.boostSpeed = false;
-					break;// character.isIdle = true; break;
+					break;
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
@@ -198,9 +203,6 @@ int main(int argc, char* argv[])
 							Mix_FreeChunk(audio.sound);
 							PlaySound("Music\\FastSwing.wav", 1);
 						}
-						//character.isAttack = true;
-						//character.animation = ATTACK;
-						//character.animationNew = ATTACK;
 
 						character.animationState = ATTACK;
 						character.attackState = BASIC;
@@ -226,10 +228,6 @@ int main(int argc, char* argv[])
 						character.animationState = ATTACK;
 						character.attackState = ULT;
 						character.attackClickThisFrame = true;
-						
-						//character.animation = ULT;
-						//character.animationNew = ULT;
-						//character.isUlt = true;
 						break;
 					}
 				}
@@ -269,8 +267,6 @@ int main(int argc, char* argv[])
 
 		if (state.isDialouge)
 			Dialogue();
-
-		//character.animationOld = character.animationNew;
 
 		SDL_RenderPresent(ren);
 	}
